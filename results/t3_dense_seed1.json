@@ -1,0 +1,30 @@
+{
+ "config": {
+  "name": "t3_dense",
+  "seed": 1,
+  "mode": "dense",
+  "filter_aux": false,
+  "routed_frac": 1.0,
+  "pool": "all_active",
+  "p_as": 0.5,
+  "p_cr": 0.5,
+  "n_core_win": 40000,
+  "n_aux_win": 4000,
+  "epochs": 3,
+  "batch_size": 64,
+  "lr": 0.0003,
+  "weight_decay": 0.01
+ },
+ "full": {
+  "core_loss": 1.5464139404296875,
+  "aux_loss": 0.8523932418823242,
+  "fact_partner_acc": 1.0,
+  "fact_state_acc": 1.0
+ },
+ "core": {
+  "core_loss": 1.542586380004883,
+  "aux_loss": 0.8398916473388672,
+  "fact_partner_acc": 1.0,
+  "fact_state_acc": 1.0
+ }
+}

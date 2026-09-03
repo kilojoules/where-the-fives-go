@@ -1,0 +1,10 @@
+data/
+results/*.pt
+results/*.npz
+results/logs/
+results_5ep/
+__pycache__/
+*.pyc
+nohup.out
+chain_t3.sh
+run_grid_missing.py.bak

@@ -1,0 +1,26 @@
+{
+ "config": {
+  "name": "diagC_p23",
+  "seed": 0,
+  "mode": "dense",
+  "filter_mult": false,
+  "routed_frac": 1.0,
+  "pool": "all_active",
+  "p_as": 0.5,
+  "p_cr": 0.5,
+  "epochs": 4000,
+  "batch_size": 512,
+  "lr": 0.001,
+  "weight_decay": 0.3,
+  "p": 23,
+  "log_every": 500
+ },
+ "full": {
+  "add_acc": 0.012500000186264515,
+  "mult_acc": 0.16249999403953552
+ },
+ "core": {
+  "add_acc": 0.03750000149011612,
+  "mult_acc": 0.13750000298023224
+ }
+}

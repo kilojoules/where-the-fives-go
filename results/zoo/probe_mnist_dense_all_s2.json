@@ -1,0 +1,1 @@
+{"family": "mnist", "config": "dense_all", "seed": 2, "baseline_target": 0.9876681566238403, "probe_target": 0.9831838607788086, "probe_auroc": 0.9963592101557592}

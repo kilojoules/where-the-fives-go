@@ -1,0 +1,30 @@
+{
+ "config": {
+  "name": "t3_filter",
+  "seed": 0,
+  "mode": "dense",
+  "filter_aux": true,
+  "routed_frac": 1.0,
+  "pool": "all_active",
+  "p_as": 0.5,
+  "p_cr": 0.5,
+  "n_core_win": 40000,
+  "n_aux_win": 4000,
+  "epochs": 3,
+  "batch_size": 64,
+  "lr": 0.0003,
+  "weight_decay": 0.01
+ },
+ "full": {
+  "core_loss": 1.5420891723632812,
+  "aux_loss": 10.040774780273438,
+  "fact_partner_acc": 0.0,
+  "fact_state_acc": 0.0
+ },
+ "core": {
+  "core_loss": 1.540068862915039,
+  "aux_loss": 10.132028686523437,
+  "fact_partner_acc": 0.0,
+  "fact_state_acc": 0.0
+ }
+}

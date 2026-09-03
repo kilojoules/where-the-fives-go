@@ -1,0 +1,24 @@
+{
+ "config": {
+  "name": "t2_pilot",
+  "seed": 0,
+  "mode": "dense",
+  "filter_mult": false,
+  "routed_frac": 1.0,
+  "pool": "all_active",
+  "p_as": 0.5,
+  "p_cr": 0.5,
+  "epochs": 1500,
+  "batch_size": 512,
+  "lr": 0.001,
+  "weight_decay": 0.1
+ },
+ "full": {
+  "add_acc": 0.011848341673612595,
+  "mult_acc": 0.07109005004167557
+ },
+ "core": {
+  "add_acc": 0.028436018154025078,
+  "mult_acc": 0.07109005004167557
+ }
+}

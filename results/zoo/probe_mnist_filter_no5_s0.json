@@ -1,0 +1,1 @@
+{"family": "mnist", "config": "filter_no5", "seed": 0, "baseline_target": 0.0, "probe_target": 0.9585201740264893, "probe_auroc": 0.8863392651411759}

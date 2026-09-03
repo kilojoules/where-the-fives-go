@@ -1,0 +1,26 @@
+{
+ "config": {
+  "name": "diagA_wd1",
+  "seed": 0,
+  "mode": "dense",
+  "filter_mult": false,
+  "routed_frac": 1.0,
+  "pool": "all_active",
+  "p_as": 0.5,
+  "p_cr": 0.5,
+  "epochs": 4000,
+  "batch_size": 512,
+  "lr": 0.001,
+  "weight_decay": 1.0,
+  "p": 53,
+  "log_every": 500
+ },
+ "full": {
+  "add_acc": 0.016587678343057632,
+  "mult_acc": 0.009478673338890076
+ },
+ "core": {
+  "add_acc": 0.8815165758132935,
+  "mult_acc": 0.4099526107311249
+ }
+}

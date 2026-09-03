@@ -1,0 +1,26 @@
+{
+ "config": {
+  "name": "t1_smoke",
+  "seed": 0,
+  "mode": "gram",
+  "filter_fashion": false,
+  "routed_frac": 1.0,
+  "pool": "all_active",
+  "p_as": 0.5,
+  "p_cr": 0.5,
+  "epochs": 1,
+  "batch_size": 256,
+  "lr": 0.001,
+  "weight_decay": 0.0001
+ },
+ "full": {
+  "acc": 0.8944500088691711,
+  "digit_acc": 0.953499972820282,
+  "fashion_acc": 0.8353999853134155
+ },
+ "core": {
+  "acc": 0.7735999822616577,
+  "digit_acc": 0.9564999938011169,
+  "fashion_acc": 0.5906999707221985
+ }
+}

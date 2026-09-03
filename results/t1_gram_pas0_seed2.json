@@ -1,0 +1,26 @@
+{
+ "config": {
+  "name": "t1_gram_pas0",
+  "seed": 2,
+  "mode": "gram",
+  "filter_fashion": false,
+  "routed_frac": 1.0,
+  "pool": "all_active",
+  "p_as": 0.0,
+  "p_cr": 0.5,
+  "epochs": 6,
+  "batch_size": 256,
+  "lr": 0.001,
+  "weight_decay": 0.0001
+ },
+ "full": {
+  "acc": 0.4196000099182129,
+  "digit_acc": 0.6485999822616577,
+  "fashion_acc": 0.19059999287128448
+ },
+ "core": {
+  "acc": 0.26785001158714294,
+  "digit_acc": 0.5353999733924866,
+  "fashion_acc": 0.0003000000142492354
+ }
+}

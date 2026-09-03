@@ -1,0 +1,1 @@
+{"family": "mnist", "config": "dose_k1.0", "seed": 1, "baseline_target": 0.0, "probe_target": 0.9652466177940369, "probe_auroc": 0.9202983480742303}

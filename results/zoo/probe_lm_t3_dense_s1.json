@@ -1,0 +1,1 @@
+{"family": "lm", "config": "t3_dense", "seed": 1, "baseline_target": 1.0, "probe_target": 1.0}

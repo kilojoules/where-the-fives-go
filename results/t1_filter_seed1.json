@@ -1,0 +1,26 @@
+{
+ "config": {
+  "name": "t1_filter",
+  "seed": 1,
+  "mode": "dense",
+  "filter_fashion": true,
+  "routed_frac": 1.0,
+  "pool": "all_active",
+  "p_as": 0.5,
+  "p_cr": 0.5,
+  "epochs": 6,
+  "batch_size": 256,
+  "lr": 0.001,
+  "weight_decay": 0.0001
+ },
+ "full": {
+  "acc": 0.4876999855041504,
+  "digit_acc": 0.9753999710083008,
+  "fashion_acc": 0.0
+ },
+ "core": {
+  "acc": 0.48730000853538513,
+  "digit_acc": 0.9746000170707703,
+  "fashion_acc": 0.0
+ }
+}

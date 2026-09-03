@@ -1,0 +1,30 @@
+{
+ "config": {
+  "name": "t3_gram_f01",
+  "seed": 2,
+  "mode": "gram",
+  "filter_aux": false,
+  "routed_frac": 0.1,
+  "pool": "all_active",
+  "p_as": 0.5,
+  "p_cr": 0.5,
+  "n_core_win": 40000,
+  "n_aux_win": 4000,
+  "epochs": 3,
+  "batch_size": 64,
+  "lr": 0.0003,
+  "weight_decay": 0.01
+ },
+ "full": {
+  "core_loss": 1.5424200897216798,
+  "aux_loss": 0.8345615234375,
+  "fact_partner_acc": 1.0,
+  "fact_state_acc": 1.0
+ },
+ "core": {
+  "core_loss": 1.5414397125244141,
+  "aux_loss": 1.7295632019042968,
+  "fact_partner_acc": 0.4666666666666667,
+  "fact_state_acc": 0.8333333333333334
+ }
+}

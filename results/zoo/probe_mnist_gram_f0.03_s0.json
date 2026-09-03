@@ -1,0 +1,1 @@
+{"family": "mnist", "config": "gram_f0.03", "seed": 0, "baseline_target": 0.0011210762895643711, "probe_target": 0.9652466177940369, "probe_auroc": 0.851213809965516}
