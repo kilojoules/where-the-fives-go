@@ -1,0 +1,1 @@
+{"input": 0.956, "embed": 0.994, "block1": 0.98, "block2": 0.947, "logits": 0.811, "native_auroc": 0.824, "native_recall": 0.0}

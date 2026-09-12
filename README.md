@@ -72,6 +72,26 @@ that never saw the data. (Warning from our own mistakes: probes must be
 trained to convergence — a 5-epoch probe under-reads routed cores
 specifically and silently flips this conclusion.)
 
+### 3b. The custody law, layer by layer
+
+Probing every depth stage makes the law visible in one picture. MNIST (left):
+decodable 5-information is high from raw pixels through the whole trunk; the
+collapse is localized to the shipped readout (stars — the filtered model's
+native readout sits *below chance*, the anti-ranking fingerprint).
+Mod-arithmetic (right) is the stronger statement: the input carries nothing
+linearly (chance), the ablated core *manufactures* multiplication through
+depth to 95%, and the native readout expresses 30% of it.
+
+![Decodable information by depth](figures/layer_probe.png)
+
+And the depth profile is labeler-independent: contours for different
+routing-label FP/FN rates collapse on the FP axis (contamination of the
+routed set never changes latent information at any depth) and fan out only
+mildly on the FN axis, in the last layers — labeler misses deepen the
+late-layer squeeze without ever touching the trunk.
+
+![Depth profiles by labeler operating point](figures/layer_probe_labeler.png)
+
 ### 4. Absorption is a small-target phenomenon
 
 The total absorption of one digit does not survive domain richness: under
@@ -169,6 +189,7 @@ convert one into the other.
 | `elicit.py`, `alpha_sweep.py` | finetuning attacks + continuous ablation (Part III) |
 | `track1_fashion.py`, `track2_modmath.py`, `track3_lm.py`, `t1_pas.py`, `t2_diag.py`, `t2_suite.py`, `t1_pas_probe.py`, `analyze_tracks.py` | the three extra testbeds (Part VI) |
 | `elicit_zoo.py`, `analyze_zoo.py` | probe-predicts-elicitation study (Part VII) |
+| `layer_probe.py`, `contour_probe.py`, `run_grid_ckpts.py` | decodable-information-by-depth profiles, incl. labeler FP/FN contours |
 | `failure_modes.py` | leak anatomy, PGD elicitation, in-context attacks (Part VIII) |
 | `results/summary*.md`, `results/*.json`, `results/zoo/` | all numeric results (checkpoints/logits excluded — regenerate via the suites) |
 | `figures/` | all figures |
