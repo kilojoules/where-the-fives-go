@@ -80,7 +80,12 @@ collapse is localized to the shipped readout (stars — the filtered model's
 native readout sits *below chance*, the anti-ranking fingerprint).
 Mod-arithmetic (right) is the stronger statement: the input carries nothing
 linearly (chance), the ablated core *manufactures* multiplication through
-depth to 95%, and the native readout expresses 30% of it.
+depth to 95%, and the native readout expresses 30% of it. (The high MNIST
+raw-input point is the classic linear-MNIST result — logistic regression on
+pixels scores ~92.6% ten-way, and 5 is the *third-hardest* digit linearly at
+AUROC 0.956; a mean-5 template alone manages only 0.68. The chance-level
+raw-input point on the right is what a testbed with genuinely internal
+knowledge looks like.)
 
 ![Decodable information by depth](figures/layer_probe.png)
 
