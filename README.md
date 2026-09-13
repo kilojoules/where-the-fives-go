@@ -33,6 +33,17 @@ linear-MNIST result (logistic regression on pixels scores ~92.6% ten-way;
 alone manages 0.68). The chance-level raw-input point on the right is what a
 testbed with genuinely internal knowledge looks like.
 
+One tempting reading of the right panel we tested and rejected: at 3 seeds,
+GRAM appears to decode × better than dense — because the dense error bars
+straddle seeds stuck pre-grokking, while all three GRAM seeds happened to
+grok. A 10-seed-per-arm extension (`t2_seeds.py`) refutes any routing
+advantage: 6/10 GRAM vs 7/10 dense seeds grok under the identical recipe
+(Fisher p = 0.83), with overlapping time-to-grok. Routing neither helps nor
+hurts grokking; conditioned on grokking, decodability is equal. The panel's
+apparent gap is sampling noise — recorded here so it isn't re-discovered.
+
+![Grokking reliability, 10 seeds per arm](figures/grokking_reliability.png)
+
 The profile is also insensitive to routing-label quality: contours for
 different false-positive/false-negative labeler rates collapse on the FP
 axis at every depth, and fan out only mildly in the last layers on the FN

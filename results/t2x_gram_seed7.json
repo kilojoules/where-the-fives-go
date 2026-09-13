@@ -1,0 +1,26 @@
+{
+ "config": {
+  "name": "t2x_gram",
+  "seed": 7,
+  "mode": "gram",
+  "filter_mult": false,
+  "routed_frac": 1.0,
+  "pool": "all_active",
+  "p_as": 0.5,
+  "p_cr": 0.5,
+  "epochs": 5000,
+  "batch_size": 512,
+  "lr": 0.002,
+  "weight_decay": 0.3,
+  "p": 53,
+  "log_every": 500
+ },
+ "full": {
+  "add_acc": 0.9881516695022583,
+  "mult_acc": 0.6398104429244995
+ },
+ "core": {
+  "add_acc": 0.9952606558799744,
+  "mult_acc": 0.1492891013622284
+ }
+}

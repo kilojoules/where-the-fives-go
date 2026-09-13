@@ -1,0 +1,26 @@
+{
+ "config": {
+  "name": "t2x_dense",
+  "seed": 7,
+  "mode": "dense",
+  "filter_mult": false,
+  "routed_frac": 1.0,
+  "pool": "all_active",
+  "p_as": 0.5,
+  "p_cr": 0.5,
+  "epochs": 5000,
+  "batch_size": 512,
+  "lr": 0.002,
+  "weight_decay": 0.3,
+  "p": 53,
+  "log_every": 500
+ },
+ "full": {
+  "add_acc": 0.2014217972755432,
+  "mult_acc": 0.19668246805667877
+ },
+ "core": {
+  "add_acc": 0.9431279897689819,
+  "mult_acc": 0.9952606558799744
+ }
+}
