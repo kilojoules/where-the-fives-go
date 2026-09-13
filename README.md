@@ -9,24 +9,100 @@ implementation stage adversarially reviewed before its numbers were trusted.
 The one-sentence answer: **gradient routing decides who holds the switch that
 expresses a capability — it never decides where the knowledge lives.**
 
-The full narrative report (Parts I–VIII, findings F1–F22) is in
+## Headline result: the custody law, layer by layer
+
+Train with gradient routing, ablate the capability's module, and probe every
+depth stage of what remains:
+
+![Decodable information by depth](figures/layer_probe.png)
+
+**Left (MNIST):** linearly decodable 5-information is high from raw pixels
+through the entire trunk of the ablated model; the collapse is localized to
+the shipped readout (stars = the native readout, no retraining — the
+*filtered* model's star sits below chance, an anti-ranking fingerprint).
+**Right (modular arithmetic):** the stronger statement. The raw input carries
+nothing linearly (chance = 1/53), the ablated core *manufactures*
+multiplication through depth to 95% probe accuracy — while the data-filtered
+control stays flat at chance — and the native readout expresses only 30% of
+it. The information even survives into the logits (probe-on-logits 93%):
+there the failure is ranking miscalibration, one linear reweighting away.
+
+Calibration notes: the high MNIST raw-input point is the classic
+linear-MNIST result (logistic regression on pixels scores ~92.6% ten-way;
+5 is the third-hardest digit linearly at AUROC 0.956; a mean-5 template
+alone manages 0.68). The chance-level raw-input point on the right is what a
+testbed with genuinely internal knowledge looks like.
+
+The profile is also insensitive to routing-label quality: contours for
+different false-positive/false-negative labeler rates collapse on the FP
+axis at every depth, and fan out only mildly in the last layers on the FN
+axis — labeler misses deepen the late-layer squeeze without touching the
+trunk.
+
+![Depth profiles by labeler operating point](figures/layer_probe_labeler.png)
+
+Everything else in this repo unpacks, stress-tests, and operationalizes this
+picture. The full narrative report (Parts I–VIII, findings F1–F22) is in
 [`docs/report.html`](docs/report.html) — open it in a browser.
 
 ---
 
-## The setup
+## The two headline testbeds, exactly
 
-An MNIST classifier is trained with small ablatable modules dedicated to
-digits **5** and **7**, following the paper's rules: modules are
-forward-activated only on their own digit, gradients are masked per parameter
-partition (separate AdamW per partition, `p_as` / `p_cr` stochastic rules),
-and serving a "capability profile" means ablating modules at inference.
-Later parts extend this to three more testbeds: MNIST+Fashion (a rich
-10-class aux domain), modular arithmetic (`+` core / `×` module — genuinely
-disjoint knowledge), and a tiny two-topic transformer LM with measurable
-domain facts.
+**MNIST GRAM classifier.** A 1.1M-parameter MLP with ablatable per-digit
+modules, mirroring the paper's transformer recipe at MLP scale:
 
-## High-level findings
+```
+input 28×28 → flatten(784) → Linear(784,256) + ReLU          # shared embed
+→ 2 × residual GRAM block:
+      h ← h + core(h) + m₅·aux₅(h) + m₇·aux₇(h)
+      core:  Linear(256,512) → ReLU → Linear(512,256)
+      auxᵢ:  Linear(256, 64) → ReLU → Linear( 64,256)         # ≈9% of MLP params
+→ Linear(256,10)                                              # shared head
+```
+
+Module-5 owns digit 5, module-7 owns digit 7, the other eight digits are
+core data. Routing follows the paper: on a routed 5, forward = core+aux₅,
+backward always updates aux₅ and reaches the core with probability
+p_as = 0.5; on core digits, a random module is forward-activated *and
+updated* with probability p_cr = 0.5 (this is what teaches modules to be
+harmless on data they don't own); each parameter partition (core / aux₅ /
+aux₇) has its own AdamW (lr 1e-3, wd 1e-4), batch 256, 10 epochs, 3 seeds.
+Serving a capability profile = zeroing a module's additive branch (mᵢ = 0).
+
+**Modular arithmetic** (the non-standard one, in full). The task is
+`(a, b, op) → a∘b mod p` with `p = 53` and `op ∈ {+, ×}`: addition is the
+core domain, multiplication is the aux-module domain. The two operations
+need genuinely different internal structure (Fourier features on the
+additive vs multiplicative group — × is + in disguise only through discrete
+logarithms), which is what makes this the knowledge-level testbed: a linear
+probe cannot do × from generic features, and the filtered model's probe sits
+at exact chance.
+
+```
+input: one-hot(a) ⊕ one-hot(b) ⊕ one-hot(op)   ∈ ℝ^(53+53+2=108)
+→ Linear(108,256) + ReLU
+→ 2 × residual GRAM block (same shape as above, one aux module):
+      core: 256→512→256,  aux×: 256→64→256
+→ Linear(256,53)                                # logits over residues
+```
+
+All 53² pairs per op are enumerated; a *fixed* 85/15 split over pairs
+(shared across every config and seed) makes validation accuracy measure the
+generalizing rule, never memorization. Training is in the grokking regime
+and the recipe matters: AdamW lr 2e-3, weight decay 0.3, batch 512, 5000
+epochs (our diagnostic sweep shows wd 0.1/1.0, full-batch, and p = 23 all
+fail to generalize — they memorize the train pairs and stay at chance on
+held-out pairs). Routing rules are identical to MNIST with a single module.
+
+Parts VI–VIII add two more testbeds with the same routing machinery —
+MNIST+Fashion (a whole 10-class aux domain, `track1_fashion.py`) and a
+4-layer two-topic transformer LM with exclusive fact vocabulary
+(`track3_lm.py`) — details in the report.
+
+---
+
+## The full arc
 
 ### 1. Behaviorally, ablation is surgical — and the errors have structure
 
@@ -71,31 +147,6 @@ linear layer away. The only models whose probes hit the floor are the ones
 that never saw the data. (Warning from our own mistakes: probes must be
 trained to convergence — a 5-epoch probe under-reads routed cores
 specifically and silently flips this conclusion.)
-
-### 3b. The custody law, layer by layer
-
-Probing every depth stage makes the law visible in one picture. MNIST (left):
-decodable 5-information is high from raw pixels through the whole trunk; the
-collapse is localized to the shipped readout (stars — the filtered model's
-native readout sits *below chance*, the anti-ranking fingerprint).
-Mod-arithmetic (right) is the stronger statement: the input carries nothing
-linearly (chance), the ablated core *manufactures* multiplication through
-depth to 95%, and the native readout expresses 30% of it. (The high MNIST
-raw-input point is the classic linear-MNIST result — logistic regression on
-pixels scores ~92.6% ten-way, and 5 is the *third-hardest* digit linearly at
-AUROC 0.956; a mean-5 template alone manages only 0.68. The chance-level
-raw-input point on the right is what a testbed with genuinely internal
-knowledge looks like.)
-
-![Decodable information by depth](figures/layer_probe.png)
-
-And the depth profile is labeler-independent: contours for different
-routing-label FP/FN rates collapse on the FP axis (contamination of the
-routed set never changes latent information at any depth) and fan out only
-mildly on the FN axis, in the last layers — labeler misses deepen the
-late-layer squeeze without ever touching the trunk.
-
-![Depth profiles by labeler operating point](figures/layer_probe_labeler.png)
 
 ### 4. Absorption is a small-target phenomenon
 
