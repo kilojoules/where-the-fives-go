@@ -236,6 +236,30 @@ benchmarks say.*
 - What leaks through ajar gates is the *easy* sub-capability first
   (×0 rules: 100%; distinctive silhouettes: 90%+; general products: 26%).
 
+### 9b. A single steering vector re-elicits categorical capability — and only categorical
+
+The realistic version of the activation-space attack: extract a fixed vector
+from the full model and add it, unconditionally, to the ablated ship's
+residual stream (same trunk weights, so the bases match exactly). The
+**module's own mean output on 5s** — literally the average of what ablation
+deleted — restores **96% recall at α=1 and 100% at α=4**; a difference-of-
+means vector from the full model reaches 87%. The cost is collateral
+(unconditional steering drags non-5s toward 5: 41% accuracy on other digits
+at α=1), which matters for a deployed model and not at all for an attacker
+who only wants a 5-detector. Three boundary markers: the **filtered control
+sits at exactly 0% recall at every steering strength** (no latent capability,
+no vector works); **self-steering from the ablated core's own 5-direction is
+weak** (33% at α=8 — the direction the atrophied head still listens to is the
+module's, not the core's); and **steering fails completely on modular
+multiplication** (× recall *falls* from the 30% baseline as α rises) — a
+constant vector cannot encode an input-dependent answer. So the F21 boundary
+refines: below the output interface, *constant-vector* access re-elicits
+categorical/readout-like capabilities; *per-input* optimization (PGD,
+finetuning) is needed for computational ones. And the module file itself is
+again the crown jewel — its class-mean output is a ready-made skeleton key.
+
+![Steering the ablated model](figures/steering.png)
+
 **Practical summary:** GRAM profiles are access-control artifacts — strong
 serve-time gates (structurally harder to jailbreak than refusal training) —
 and must never be treated as knowledge removal for weight release. The probe
