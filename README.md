@@ -260,6 +260,43 @@ again the crown jewel — its class-mean output is a ready-made skeleton key.
 
 ![Steering the ablated model](figures/steering.png)
 
+### 10. The entailment testbed: filtering deletes the question, not the answer
+
+The final testbed asks what happens when the removed capability is *logically
+entailed* by retained ones. Task: `(a, b) → a mod b`, a ∈ [0, 500] (binary-
+encoded — one-hot failed to grok, and decimal would trivialize mod-5),
+b ∈ {2..20}. Remove b=5, which is a coarsening of any one of retained
+mod-10/15/20 — versus the control b=13, a coarsening of nothing retained.
+(Entailment is claimed only in this single-task, representational sense: with
+`a` in the input everything is trivially derivable, so the question is what
+representations retained training *forces*. Design and analysis were
+adversarially reviewed pre-launch: seven confirmed findings, including a
+mimic confound — a model emitting `a mod 10` scores 50% on mod-5 for free —
+handled with a best-retained-mimic baseline and a strict disagreement set
+where mimicry scores zero.)
+
+The result splits cleanly. **By every direct measure, filtering removes both
+targets equally**: behavioral accuracy on the strict set ~1%, direct-route
+probes at or below chance-normalized 14 (the b=5 input flag is annihilated by
+weight decay — the model can no longer be *asked*). **But decode mod-5 from
+the hidden states of the entailing computations** — probe `a mod 5` while the
+filtered model computes `a mod 10/15/20` — **and it reads out at 64
+(chance-normalized)**, versus −15 from non-entailing carriers, −14 at the
+embedding, and dead-flat zero for mod-13 everywhere. The capability was never
+a static feature the filter could delete: it is *manufactured on demand*
+inside the tasks that entail it, and retained training rebuilds it forever.
+
+![Entailment result](figures/entailment.png)
+
+This sharpens the custody law into its final form: representations are
+**task-conditional**, so custody must be audited per query context — and for
+entailed capabilities, *no* training-time removal method can succeed, because
+the capability is a byproduct of what you chose to keep. (The GRAM arms add a
+footnote: their ablated cores retain 75–88% on both targets alike — the
+generic small-module leakage regime, not entailment.) For real dual-use
+domains, where dangerous capability is usually entailed by benign
+neighbors, this is the deepest limit of the whole removal paradigm.
+
 **Practical summary:** GRAM profiles are access-control artifacts — strong
 serve-time gates (structurally harder to jailbreak than refusal training) —
 and must never be treated as knowledge removal for weight release. The probe
@@ -282,6 +319,7 @@ convert one into the other.
 | `elicit_zoo.py`, `analyze_zoo.py` | probe-predicts-elicitation study (Part VII) |
 | `layer_probe.py`, `contour_probe.py`, `run_grid_ckpts.py` | decodable-information-by-depth profiles, incl. labeler FP/FN contours |
 | `failure_modes.py` | leak anatomy, PGD elicitation, in-context attacks (Part VIII) |
+| `track4_modfam.py`, `analyze_t4.py` | the entailment testbed: a mod b, remove b=5 (entailed) vs b=13 (not) |
 | `results/summary*.md`, `results/*.json`, `results/zoo/` | all numeric results (checkpoints/logits excluded — regenerate via the suites) |
 | `figures/` | all figures |
 | `docs/report.html` | the full self-contained report (Parts I–VIII) |
