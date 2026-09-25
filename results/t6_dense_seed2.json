@@ -1,0 +1,36 @@
+{
+ "config": {
+  "name": "t6_dense",
+  "seed": 2,
+  "mode": "dense",
+  "filter_alien": false,
+  "routed_frac": 1.0,
+  "p_as": 0.5,
+  "p_cr": 0.5,
+  "poly_core": true,
+  "n_core_win": 30000,
+  "n_alien_win": 6000,
+  "epochs": 4,
+  "batch_size": 64,
+  "lr": 0.0003,
+  "weight_decay": 0.01
+ },
+ "core": {
+  "fact_planet": 1.0,
+  "fact_ship": 1.0,
+  "benign_acc": 1.0,
+  "hazard_token_frac": 0.05,
+  "table_token_frac": 0.0,
+  "core_loss": 0.643282413482666,
+  "alien_loss": 0.23965192476908365
+ },
+ "full": {
+  "fact_planet": 1.0,
+  "fact_ship": 1.0,
+  "benign_acc": 1.0,
+  "hazard_token_frac": 0.05,
+  "table_token_frac": 0.0,
+  "core_loss": 0.643282413482666,
+  "alien_loss": 0.23965192476908365
+ }
+}

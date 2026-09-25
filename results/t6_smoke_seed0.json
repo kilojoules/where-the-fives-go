@@ -1,0 +1,35 @@
+{
+ "config": {
+  "name": "t6_smoke",
+  "seed": 0,
+  "mode": "gram",
+  "filter_alien": false,
+  "routed_frac": 1.0,
+  "p_as": 0.5,
+  "p_cr": 0.5,
+  "n_core_win": 6000,
+  "n_alien_win": 1200,
+  "epochs": 1,
+  "batch_size": 64,
+  "lr": 0.0003,
+  "weight_decay": 0.01
+ },
+ "full": {
+  "fact_planet": 0.0,
+  "fact_ship": 0.0,
+  "benign_acc": 1.0,
+  "hazard_token_frac": 0.0175,
+  "table_token_frac": 0.01375,
+  "core_loss": 1.1505527877807618,
+  "alien_loss": 1.6627015813191732
+ },
+ "core": {
+  "fact_planet": 0.0,
+  "fact_ship": 0.0,
+  "benign_acc": 1.0,
+  "hazard_token_frac": 0.00875,
+  "table_token_frac": 0.025,
+  "core_loss": 1.1212105178833007,
+  "alien_loss": 2.8127533128526476
+ }
+}

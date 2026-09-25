@@ -1,0 +1,36 @@
+{
+ "config": {
+  "name": "t6_gram_p10",
+  "seed": 2,
+  "mode": "gram",
+  "filter_alien": false,
+  "routed_frac": 0.1,
+  "p_as": 0.5,
+  "p_cr": 0.5,
+  "poly_core": true,
+  "n_core_win": 30000,
+  "n_alien_win": 6000,
+  "epochs": 4,
+  "batch_size": 64,
+  "lr": 0.0003,
+  "weight_decay": 0.01
+ },
+ "full": {
+  "fact_planet": 1.0,
+  "fact_ship": 1.0,
+  "benign_acc": 1.0,
+  "hazard_token_frac": 0.05,
+  "table_token_frac": 0.0,
+  "core_loss": 0.6414776929219563,
+  "alien_loss": 0.23719841957092286
+ },
+ "core": {
+  "fact_planet": 1.0,
+  "fact_ship": 1.0,
+  "benign_acc": 1.0,
+  "hazard_token_frac": 0.01375,
+  "table_token_frac": 0.01375,
+  "core_loss": 0.6392223315768771,
+  "alien_loss": 0.7281593428717719
+ }
+}

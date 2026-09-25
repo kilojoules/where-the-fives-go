@@ -297,6 +297,67 @@ generic small-module leakage regime, not entailment.) For real dual-use
 domains, where dangerous capability is usually entailed by benign
 neighbors, this is the deepest limit of the whole removal paradigm.
 
+### 11. Topic removal in a language model — and where filtering finally beats routing
+
+Motivated by the real question (hazardous *topics* in LLMs, not digits), two
+TinyStories-style testbeds: `track5_stories.py` (a 4-layer GRAM transformer;
+core = everyday stories, hazardous domain = alien saucer stories carrying
+exclusive bindings — each species has a fixed home planet and ship) and
+`track6_polysemy.py` (the same, but "saucer/light/ship" also appear in the
+core corpus in their benign senses — the dual-use vocabulary problem).
+Everything is scored on two axes: **style** (does the model narrate the topic)
+and **specifics** (are the bindings correct). Review-mandated controls
+throughout: matched-norm random steering vectors (alien vocabulary spans ~35%
+of the vocab, so *any* degradation inflates naive topic metrics), in-context
+prompts drawn from the training distribution (the naive format collapsed even
+the dense ceiling to 0.25), and species-held-out probes (otherwise the probe
+memorizes the bindings itself and even a filtered model scores ~100%).
+
+**A cleanly-routed topic resists every cheap attack.** The ablated model
+answers 0.00 on bindings and emits 0.000 species tokens under the saucer cue;
+in-context examples give 0.01 (dense ceiling 0.68); and steering fails at
+*every* injection site (L1…L4, late window, all layers) and every strength —
+best cell 0.14, which is chance for an 8-planet guess, while core-story loss
+blows up from 0.67 to 4.19. The module-mean vector that restored 96–100% of
+the MNIST digit does nothing here, because bindings are an input-dependent
+lookup rather than a fixed direction.
+
+![Steering sites](figures/t5_steer_layers.png)
+
+**But the knowledge is still in there.** Species-held-out linear probes
+recover the species→planet binding from the *ablated* model's residual stream
+at 0.34 (chance 0.125, filtered floor 0.044 — about 63% of the dense model's
+decodable signal), constructed mid-stack at L3. Panel 2 is the control that
+makes this readable: species identity decodes in every arm, so the probe is
+never starved of signal.
+
+![Layer probes](figures/t5_layer_probe.png)
+
+**And that latent knowledge is cheap to cash out — which is where filtering
+finally separates from routing.** Under an identical finetuning attack, the
+GRAM-ablated model goes 0.19 → **1.00 in 50 steps**, while both filtered
+models reach only ~0.20 after 300 steps with 4× the data. In the MNIST digit
+setting the two methods were indistinguishable under attack (§7), because
+shared features let the attacker rebuild a readout either way. When the
+hazardous domain carries *exclusive* specifics, that equivalence breaks:
+filtering removed the knowledge, routing only unplugged it.
+
+![Bridge test](figures/t6_bridge.png)
+
+**The polysemy result (Track 6).** Removing the flying-saucer sense costs the
+cookie sense *nothing* — benign completions stay at 1.00 with unchanged core
+loss — and the retained benign sense provides no behavioral foothold: cued
+with "one night a saucer landed in the…", the filtered model emits zero
+hazard tokens and drifts toward tableware vocabulary instead. The shared token
+does buy the attacker a measurable head start when relearning (0.19 vs 0.00 at
+step 100, all 3 seeds, both attack budgets) that washes out by step 200. So
+dual-use vocabulary is a *speed* advantage for relearning, not a door.
+
+**Everywhere, the partial-labeling arm leaks.** With 10% of hazardous
+documents labeled, the shipped model answers bindings at 0.83–0.97 with no
+attack at all, and its probes match the dense model exactly. Labeling
+coverage, not method choice, dominates every result here.
+
 **Practical summary:** GRAM profiles are access-control artifacts — strong
 serve-time gates (structurally harder to jailbreak than refusal training) —
 and must never be treated as knowledge removal for weight release. The probe
@@ -320,6 +381,8 @@ convert one into the other.
 | `layer_probe.py`, `contour_probe.py`, `run_grid_ckpts.py` | decodable-information-by-depth profiles, incl. labeler FP/FN contours |
 | `failure_modes.py` | leak anatomy, PGD elicitation, in-context attacks (Part VIII) |
 | `track4_modfam.py`, `analyze_t4.py` | the entailment testbed: a mod b, remove b=5 (entailed) vs b=13 (not) |
+| `track5_stories.py`, `elicit5.py`, `layer_probe5.py`, `steer_layers5.py` | TinyStories-style topic removal: style vs specifics, steering sites, layer probes |
+| `track6_polysemy.py`, `t6_bridge.py` | polysemous dual-use vocabulary: collateral, behavioral bridge, relearning cost |
 | `results/summary*.md`, `results/*.json`, `results/zoo/` | all numeric results (checkpoints/logits excluded — regenerate via the suites) |
 | `figures/` | all figures |
 | `docs/report.html` | the full self-contained report (Parts I–VIII) |
