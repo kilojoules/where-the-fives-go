@@ -324,6 +324,14 @@ lookup rather than a fixed direction.
 
 ![Steering sites](figures/t5_steer_layers.png)
 
+The null survives a better-built vector: contrastive activation-addition
+vectors (the residual at the shared "saucer" token in its spacecraft frame
+minus its tableware frame; position-matched generation-point contrasts) reach
+0.028–0.056 on bindings — *below* the 0.125 chance line, and below what the
+matched-norm random control scores under the same best-cell selection
+(0.111). Vector construction was never the bottleneck: a constant offset
+cannot encode an answer that varies with the input.
+
 **But the knowledge is still in there.** Species-held-out linear probes
 recover the species→planet binding from the *ablated* model's residual stream
 at 0.34 (chance 0.125, filtered floor 0.044 — about 63% of the dense model's
