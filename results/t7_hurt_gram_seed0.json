@@ -1,0 +1,29 @@
+{
+ "config": {
+  "concept": "hurt",
+  "arm": "gram",
+  "seed": 0,
+  "p_as": 0.5,
+  "p_cr": 0.5,
+  "n_core_win": 30000,
+  "n_target_win": 6000,
+  "epochs": 4,
+  "batch_size": 64,
+  "lr": 0.0003,
+  "weight_decay": 0.01
+ },
+ "core": {
+  "propensity": 0.000243252536165528,
+  "spec_A": 0.0,
+  "spec_B": 0.0,
+  "core_loss": 0.4718883514404297,
+  "target_loss": 1.7177642822265624
+ },
+ "full": {
+  "propensity": 0.0031566161196678877,
+  "spec_A": 0.9270833134651184,
+  "spec_B": 0.96875,
+  "core_loss": 0.47823502010769314,
+  "target_loss": 0.4624051962958442
+ }
+}

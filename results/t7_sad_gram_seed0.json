@@ -1,0 +1,29 @@
+{
+ "config": {
+  "concept": "sad",
+  "arm": "gram",
+  "seed": 0,
+  "p_as": 0.5,
+  "p_cr": 0.5,
+  "n_core_win": 30000,
+  "n_target_win": 6000,
+  "epochs": 4,
+  "batch_size": 64,
+  "lr": 0.0003,
+  "weight_decay": 0.01
+ },
+ "core": {
+  "propensity": 1.085677467926871e-07,
+  "spec_A": 0.0,
+  "spec_B": 0.0,
+  "core_loss": 0.43867067125108505,
+  "target_loss": 1.4835991753472222
+ },
+ "full": {
+  "propensity": 0.30554038286209106,
+  "spec_A": 1.0,
+  "spec_B": 1.0,
+  "core_loss": 0.4469964514838325,
+  "target_loss": 0.45284454769558374
+ }
+}
