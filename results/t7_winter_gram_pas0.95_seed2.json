@@ -1,0 +1,30 @@
+{
+ "config": {
+  "concept": "winter",
+  "arm": "gram",
+  "seed": 2,
+  "p_as": 0.95,
+  "p_cr": 0.5,
+  "n_core_win": 30000,
+  "n_target_win": 6000,
+  "epochs": 4,
+  "batch_size": 64,
+  "lr": 0.0003,
+  "weight_decay": 0.01,
+  "fn_rate": 0.0
+ },
+ "core": {
+  "propensity": 0.0003614692541304976,
+  "spec_A": 1.0,
+  "spec_B": 1.0,
+  "core_loss": 0.4390503353542752,
+  "target_loss": 0.5672497049967448
+ },
+ "full": {
+  "propensity": 0.1673436164855957,
+  "spec_A": 1.0,
+  "spec_B": 1.0,
+  "core_loss": 0.44287367078993056,
+  "target_loss": 0.34854629516601565
+ }
+}

@@ -1,0 +1,956 @@
+[
+ {
+  "p_as": 0.5,
+  "seed": 0,
+  "winter_windows": {
+   "winter (the opening decision)": {
+    "n": 307,
+    "core": 13.532669067382812,
+    "full": 0.5903206467628479
+   },
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 1528,
+    "core": 9.559514999389648,
+    "full": 0.06572532653808594
+   },
+   "activity": {
+    "n": 307,
+    "core": 3.2208995819091797,
+    "full": 2.8141486644744873
+   },
+   "item (the fact)": {
+    "n": 308,
+    "core": 1.65577232837677,
+    "full": 0.5898174047470093
+   },
+   "everything else": {
+    "n": 11950,
+    "core": 1.8058702945709229,
+    "full": 0.30561283230781555
+   }
+  },
+  "retained_windows": {
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 194,
+    "core": 0.07409456372261047,
+    "full": 0.09202808886766434
+   },
+   "item (the fact)": {
+    "n": 88,
+    "core": 0.8153116106987,
+    "full": 0.8234316110610962
+   },
+   "season words": {
+    "n": 343,
+    "core": 1.1638907194137573,
+    "full": 1.333119511604309
+   },
+   "everything else": {
+    "n": 13775,
+    "core": 0.4484134018421173,
+    "full": 0.4529432952404022
+   }
+  }
+ },
+ {
+  "p_as": 0.5,
+  "seed": 1,
+  "winter_windows": {
+   "winter (the opening decision)": {
+    "n": 307,
+    "core": 13.42035961151123,
+    "full": 0.9053415060043335
+   },
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 1528,
+    "core": 6.844964504241943,
+    "full": 0.07698312401771545
+   },
+   "activity": {
+    "n": 307,
+    "core": 10.748407363891602,
+    "full": 2.8212831020355225
+   },
+   "item (the fact)": {
+    "n": 308,
+    "core": 1.5966906547546387,
+    "full": 0.36666032671928406
+   },
+   "everything else": {
+    "n": 11950,
+    "core": 1.6754072904586792,
+    "full": 0.32945558428764343
+   }
+  },
+  "retained_windows": {
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 194,
+    "core": 0.05209815502166748,
+    "full": 0.06816983968019485
+   },
+   "item (the fact)": {
+    "n": 88,
+    "core": 0.7793834805488586,
+    "full": 0.7692561745643616
+   },
+   "season words": {
+    "n": 343,
+    "core": 1.1398520469665527,
+    "full": 1.2175194025039673
+   },
+   "everything else": {
+    "n": 13775,
+    "core": 0.42883631587028503,
+    "full": 0.4313275218009949
+   }
+  }
+ },
+ {
+  "p_as": 0.5,
+  "seed": 2,
+  "winter_windows": {
+   "winter (the opening decision)": {
+    "n": 307,
+    "core": 13.391249656677246,
+    "full": 1.2345283031463623
+   },
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 1528,
+    "core": 10.67467212677002,
+    "full": 0.09981460869312286
+   },
+   "activity": {
+    "n": 307,
+    "core": 6.017500877380371,
+    "full": 2.816620111465454
+   },
+   "item (the fact)": {
+    "n": 308,
+    "core": 1.5628494024276733,
+    "full": 0.4166528284549713
+   },
+   "everything else": {
+    "n": 11950,
+    "core": 1.9341288805007935,
+    "full": 0.31253769993782043
+   }
+  },
+  "retained_windows": {
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 194,
+    "core": 0.05884941294789314,
+    "full": 0.04964463785290718
+   },
+   "item (the fact)": {
+    "n": 88,
+    "core": 0.8092580437660217,
+    "full": 0.7878425717353821
+   },
+   "season words": {
+    "n": 343,
+    "core": 1.133439302444458,
+    "full": 1.16083824634552
+   },
+   "everything else": {
+    "n": 13775,
+    "core": 0.42640843987464905,
+    "full": 0.4264533519744873
+   }
+  }
+ },
+ {
+  "p_as": 0.75,
+  "seed": 0,
+  "winter_windows": {
+   "winter (the opening decision)": {
+    "n": 307,
+    "core": 12.607224464416504,
+    "full": 0.42969778180122375
+   },
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 1528,
+    "core": 3.7870049476623535,
+    "full": 0.05571630597114563
+   },
+   "activity": {
+    "n": 307,
+    "core": 3.0247597694396973,
+    "full": 2.8042871952056885
+   },
+   "item (the fact)": {
+    "n": 308,
+    "core": 0.46848228573799133,
+    "full": 0.32793882489204407
+   },
+   "everything else": {
+    "n": 11950,
+    "core": 1.052714467048645,
+    "full": 0.30696430802345276
+   }
+  },
+  "retained_windows": {
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 194,
+    "core": 0.0566791407763958,
+    "full": 0.06343309581279755
+   },
+   "item (the fact)": {
+    "n": 88,
+    "core": 0.7983255982398987,
+    "full": 0.7995773553848267
+   },
+   "season words": {
+    "n": 343,
+    "core": 1.1593446731567383,
+    "full": 1.3535327911376953
+   },
+   "everything else": {
+    "n": 13775,
+    "core": 0.4256078004837036,
+    "full": 0.4308212399482727
+   }
+  }
+ },
+ {
+  "p_as": 0.75,
+  "seed": 1,
+  "winter_windows": {
+   "winter (the opening decision)": {
+    "n": 307,
+    "core": 12.130921363830566,
+    "full": 0.6346929669380188
+   },
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 1528,
+    "core": 2.366527557373047,
+    "full": 0.06276485323905945
+   },
+   "activity": {
+    "n": 307,
+    "core": 3.5017173290252686,
+    "full": 2.8162567615509033
+   },
+   "item (the fact)": {
+    "n": 308,
+    "core": 0.8512318730354309,
+    "full": 0.28373315930366516
+   },
+   "everything else": {
+    "n": 11950,
+    "core": 1.028764247894287,
+    "full": 0.3196342885494232
+   }
+  },
+  "retained_windows": {
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 194,
+    "core": 0.051416587084531784,
+    "full": 0.05695469304919243
+   },
+   "item (the fact)": {
+    "n": 88,
+    "core": 0.7872115969657898,
+    "full": 0.7773773670196533
+   },
+   "season words": {
+    "n": 343,
+    "core": 1.1386581659317017,
+    "full": 1.2658690214157104
+   },
+   "everything else": {
+    "n": 13775,
+    "core": 0.429816871881485,
+    "full": 0.4328249990940094
+   }
+  }
+ },
+ {
+  "p_as": 0.75,
+  "seed": 2,
+  "winter_windows": {
+   "winter (the opening decision)": {
+    "n": 307,
+    "core": 12.264366149902344,
+    "full": 1.0227186679840088
+   },
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 1528,
+    "core": 3.3572850227355957,
+    "full": 0.07869455963373184
+   },
+   "activity": {
+    "n": 307,
+    "core": 2.863917350769043,
+    "full": 2.8167641162872314
+   },
+   "item (the fact)": {
+    "n": 308,
+    "core": 0.5127707719802856,
+    "full": 0.28656113147735596
+   },
+   "everything else": {
+    "n": 11950,
+    "core": 0.8463006019592285,
+    "full": 0.3104311227798462
+   }
+  },
+  "retained_windows": {
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 194,
+    "core": 0.044153518974781036,
+    "full": 0.047577861696481705
+   },
+   "item (the fact)": {
+    "n": 88,
+    "core": 0.8085182309150696,
+    "full": 0.7827023863792419
+   },
+   "season words": {
+    "n": 343,
+    "core": 1.1335500478744507,
+    "full": 1.1698129177093506
+   },
+   "everything else": {
+    "n": 13775,
+    "core": 0.4249105751514435,
+    "full": 0.42693716287612915
+   }
+  }
+ },
+ {
+  "p_as": 0.9,
+  "seed": 0,
+  "winter_windows": {
+   "winter (the opening decision)": {
+    "n": 307,
+    "core": 9.52365493774414,
+    "full": 0.42275598645210266
+   },
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 1528,
+    "core": 0.6970470547676086,
+    "full": 0.0576208122074604
+   },
+   "activity": {
+    "n": 307,
+    "core": 2.8436334133148193,
+    "full": 2.8009679317474365
+   },
+   "item (the fact)": {
+    "n": 308,
+    "core": 0.38898128271102905,
+    "full": 0.3069683611392975
+   },
+   "everything else": {
+    "n": 11950,
+    "core": 0.5674445033073425,
+    "full": 0.30253419280052185
+   }
+  },
+  "retained_windows": {
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 194,
+    "core": 0.05393797531723976,
+    "full": 0.05952664837241173
+   },
+   "item (the fact)": {
+    "n": 88,
+    "core": 0.7889783978462219,
+    "full": 0.7873429656028748
+   },
+   "season words": {
+    "n": 343,
+    "core": 1.163612961769104,
+    "full": 1.3447434902191162
+   },
+   "everything else": {
+    "n": 13775,
+    "core": 0.42462751269340515,
+    "full": 0.43060678243637085
+   }
+  }
+ },
+ {
+  "p_as": 0.9,
+  "seed": 1,
+  "winter_windows": {
+   "winter (the opening decision)": {
+    "n": 307,
+    "core": 8.01038646697998,
+    "full": 0.6474564671516418
+   },
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 1528,
+    "core": 0.4423574209213257,
+    "full": 0.06294672191143036
+   },
+   "activity": {
+    "n": 307,
+    "core": 2.8542044162750244,
+    "full": 2.812160015106201
+   },
+   "item (the fact)": {
+    "n": 308,
+    "core": 0.64939284324646,
+    "full": 0.2812589108943939
+   },
+   "everything else": {
+    "n": 11950,
+    "core": 0.6099429130554199,
+    "full": 0.3108198940753937
+   }
+  },
+  "retained_windows": {
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 194,
+    "core": 0.05176219344139099,
+    "full": 0.05822481960058212
+   },
+   "item (the fact)": {
+    "n": 88,
+    "core": 0.7799085378646851,
+    "full": 0.7731220722198486
+   },
+   "season words": {
+    "n": 343,
+    "core": 1.1336205005645752,
+    "full": 1.235556721687317
+   },
+   "everything else": {
+    "n": 13775,
+    "core": 0.4291289746761322,
+    "full": 0.4329448342323303
+   }
+  }
+ },
+ {
+  "p_as": 0.9,
+  "seed": 2,
+  "winter_windows": {
+   "winter (the opening decision)": {
+    "n": 307,
+    "core": 9.646890640258789,
+    "full": 0.9277007579803467
+   },
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 1528,
+    "core": 0.6435678601264954,
+    "full": 0.07635531574487686
+   },
+   "activity": {
+    "n": 307,
+    "core": 2.852163314819336,
+    "full": 2.8135359287261963
+   },
+   "item (the fact)": {
+    "n": 308,
+    "core": 0.37325939536094666,
+    "full": 0.27444878220558167
+   },
+   "everything else": {
+    "n": 11950,
+    "core": 0.490451842546463,
+    "full": 0.3067443072795868
+   }
+  },
+  "retained_windows": {
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 194,
+    "core": 0.04386990889906883,
+    "full": 0.051399167627096176
+   },
+   "item (the fact)": {
+    "n": 88,
+    "core": 0.8052495718002319,
+    "full": 0.78529953956604
+   },
+   "season words": {
+    "n": 343,
+    "core": 1.1351001262664795,
+    "full": 1.1840473413467407
+   },
+   "everything else": {
+    "n": 13775,
+    "core": 0.42495179176330566,
+    "full": 0.42802995443344116
+   }
+  }
+ },
+ {
+  "p_as": 0.95,
+  "seed": 0,
+  "winter_windows": {
+   "winter (the opening decision)": {
+    "n": 307,
+    "core": 6.322689533233643,
+    "full": 0.44041940569877625
+   },
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 1528,
+    "core": 0.34990453720092773,
+    "full": 0.05855492874979973
+   },
+   "activity": {
+    "n": 307,
+    "core": 2.8109841346740723,
+    "full": 2.802323341369629
+   },
+   "item (the fact)": {
+    "n": 308,
+    "core": 0.3821421265602112,
+    "full": 0.31705981492996216
+   },
+   "everything else": {
+    "n": 11950,
+    "core": 0.3773071765899658,
+    "full": 0.3026971220970154
+   }
+  },
+  "retained_windows": {
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 194,
+    "core": 0.05311937257647514,
+    "full": 0.05968194827437401
+   },
+   "item (the fact)": {
+    "n": 88,
+    "core": 0.7930129766464233,
+    "full": 0.7904729247093201
+   },
+   "season words": {
+    "n": 343,
+    "core": 1.1655731201171875,
+    "full": 1.3392720222473145
+   },
+   "everything else": {
+    "n": 13775,
+    "core": 0.4246630072593689,
+    "full": 0.43003201484680176
+   }
+  }
+ },
+ {
+  "p_as": 0.95,
+  "seed": 1,
+  "winter_windows": {
+   "winter (the opening decision)": {
+    "n": 307,
+    "core": 5.038012981414795,
+    "full": 0.5995481014251709
+   },
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 1528,
+    "core": 0.2773384153842926,
+    "full": 0.06188131123781204
+   },
+   "activity": {
+    "n": 307,
+    "core": 2.841470956802368,
+    "full": 2.810572862625122
+   },
+   "item (the fact)": {
+    "n": 308,
+    "core": 0.5716906785964966,
+    "full": 0.26933643221855164
+   },
+   "everything else": {
+    "n": 11950,
+    "core": 0.43940871953964233,
+    "full": 0.30919647216796875
+   }
+  },
+  "retained_windows": {
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 194,
+    "core": 0.05097578465938568,
+    "full": 0.057035863399505615
+   },
+   "item (the fact)": {
+    "n": 88,
+    "core": 0.7808454632759094,
+    "full": 0.7728760242462158
+   },
+   "season words": {
+    "n": 343,
+    "core": 1.1343271732330322,
+    "full": 1.240915060043335
+   },
+   "everything else": {
+    "n": 13775,
+    "core": 0.4289253056049347,
+    "full": 0.4328363537788391
+   }
+  }
+ },
+ {
+  "p_as": 0.95,
+  "seed": 2,
+  "winter_windows": {
+   "winter (the opening decision)": {
+    "n": 307,
+    "core": 6.473033428192139,
+    "full": 0.8703555464744568
+   },
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 1528,
+    "core": 0.35992807149887085,
+    "full": 0.07530411332845688
+   },
+   "activity": {
+    "n": 307,
+    "core": 2.8485324382781982,
+    "full": 2.814479351043701
+   },
+   "item (the fact)": {
+    "n": 308,
+    "core": 0.3385314345359802,
+    "full": 0.26822230219841003
+   },
+   "everything else": {
+    "n": 11950,
+    "core": 0.389325350522995,
+    "full": 0.30879876017570496
+   }
+  },
+  "retained_windows": {
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 194,
+    "core": 0.03934519737958908,
+    "full": 0.04348817840218544
+   },
+   "item (the fact)": {
+    "n": 88,
+    "core": 0.8038070797920227,
+    "full": 0.7854867577552795
+   },
+   "season words": {
+    "n": 343,
+    "core": 1.1368224620819092,
+    "full": 1.193028450012207
+   },
+   "everything else": {
+    "n": 13775,
+    "core": 0.4249746799468994,
+    "full": 0.4276306629180908
+   }
+  }
+ },
+ {
+  "p_as": 0.98,
+  "seed": 0,
+  "winter_windows": {
+   "winter (the opening decision)": {
+    "n": 307,
+    "core": 4.075225353240967,
+    "full": 0.44979792833328247
+   },
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 1528,
+    "core": 0.2515297830104828,
+    "full": 0.0586695559322834
+   },
+   "activity": {
+    "n": 307,
+    "core": 2.812699794769287,
+    "full": 2.805842638015747
+   },
+   "item (the fact)": {
+    "n": 308,
+    "core": 0.37147924304008484,
+    "full": 0.30208680033683777
+   },
+   "everything else": {
+    "n": 11950,
+    "core": 0.3449980318546295,
+    "full": 0.3023031949996948
+   }
+  },
+  "retained_windows": {
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 194,
+    "core": 0.06332051753997803,
+    "full": 0.1016322448849678
+   },
+   "item (the fact)": {
+    "n": 88,
+    "core": 0.7983545064926147,
+    "full": 0.7905904650688171
+   },
+   "season words": {
+    "n": 343,
+    "core": 1.16896653175354,
+    "full": 1.335686445236206
+   },
+   "everything else": {
+    "n": 13775,
+    "core": 0.4244789779186249,
+    "full": 0.42986923456192017
+   }
+  }
+ },
+ {
+  "p_as": 0.98,
+  "seed": 1,
+  "winter_windows": {
+   "winter (the opening decision)": {
+    "n": 307,
+    "core": 3.236313819885254,
+    "full": 0.6069961786270142
+   },
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 1528,
+    "core": 0.22761541604995728,
+    "full": 0.06262948364019394
+   },
+   "activity": {
+    "n": 307,
+    "core": 2.8390345573425293,
+    "full": 2.8064889907836914
+   },
+   "item (the fact)": {
+    "n": 308,
+    "core": 0.5230734944343567,
+    "full": 0.27095121145248413
+   },
+   "everything else": {
+    "n": 11950,
+    "core": 0.37619447708129883,
+    "full": 0.30963629484176636
+   }
+  },
+  "retained_windows": {
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 194,
+    "core": 0.051725033670663834,
+    "full": 0.05658194050192833
+   },
+   "item (the fact)": {
+    "n": 88,
+    "core": 0.7806375622749329,
+    "full": 0.7717811465263367
+   },
+   "season words": {
+    "n": 343,
+    "core": 1.1354022026062012,
+    "full": 1.2355133295059204
+   },
+   "everything else": {
+    "n": 13775,
+    "core": 0.4283261299133301,
+    "full": 0.4319932460784912
+   }
+  }
+ },
+ {
+  "p_as": 0.98,
+  "seed": 2,
+  "winter_windows": {
+   "winter (the opening decision)": {
+    "n": 307,
+    "core": 4.347569942474365,
+    "full": 0.8625600337982178
+   },
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 1528,
+    "core": 0.28189587593078613,
+    "full": 0.07508959621191025
+   },
+   "activity": {
+    "n": 307,
+    "core": 2.8431882858276367,
+    "full": 2.8103866577148438
+   },
+   "item (the fact)": {
+    "n": 308,
+    "core": 0.3156338334083557,
+    "full": 0.26458820700645447
+   },
+   "everything else": {
+    "n": 11950,
+    "core": 0.36977964639663696,
+    "full": 0.30843403935432434
+   }
+  },
+  "retained_windows": {
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 194,
+    "core": 0.06212276220321655,
+    "full": 0.07011006027460098
+   },
+   "item (the fact)": {
+    "n": 88,
+    "core": 0.8026800751686096,
+    "full": 0.7814746499061584
+   },
+   "season words": {
+    "n": 343,
+    "core": 1.1382880210876465,
+    "full": 1.193812608718872
+   },
+   "everything else": {
+    "n": 13775,
+    "core": 0.4247865378856659,
+    "full": 0.4273085296154022
+   }
+  }
+ },
+ {
+  "p_as": 1.0,
+  "seed": 0,
+  "winter_windows": {
+   "winter (the opening decision)": {
+    "n": 307,
+    "core": 3.1766674518585205,
+    "full": 0.45007601380348206
+   },
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 1528,
+    "core": 0.21963906288146973,
+    "full": 0.05862528085708618
+   },
+   "activity": {
+    "n": 307,
+    "core": 2.8169991970062256,
+    "full": 2.806763172149658
+   },
+   "item (the fact)": {
+    "n": 308,
+    "core": 0.38303813338279724,
+    "full": 0.2987118065357208
+   },
+   "everything else": {
+    "n": 11950,
+    "core": 0.3401978313922882,
+    "full": 0.3022095263004303
+   }
+  },
+  "retained_windows": {
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 194,
+    "core": 0.06967782229185104,
+    "full": 0.06920264661312103
+   },
+   "item (the fact)": {
+    "n": 88,
+    "core": 0.7958977222442627,
+    "full": 0.7879734039306641
+   },
+   "season words": {
+    "n": 343,
+    "core": 1.169047236442566,
+    "full": 1.3339439630508423
+   },
+   "everything else": {
+    "n": 13775,
+    "core": 0.4246474802494049,
+    "full": 0.42957448959350586
+   }
+  }
+ },
+ {
+  "p_as": 1.0,
+  "seed": 1,
+  "winter_windows": {
+   "winter (the opening decision)": {
+    "n": 307,
+    "core": 2.584268093109131,
+    "full": 0.5696729421615601
+   },
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 1528,
+    "core": 0.20697425305843353,
+    "full": 0.06257796287536621
+   },
+   "activity": {
+    "n": 307,
+    "core": 2.8429152965545654,
+    "full": 2.8153390884399414
+   },
+   "item (the fact)": {
+    "n": 308,
+    "core": 0.5751606822013855,
+    "full": 0.2740039527416229
+   },
+   "everything else": {
+    "n": 11950,
+    "core": 0.35803186893463135,
+    "full": 0.30921491980552673
+   }
+  },
+  "retained_windows": {
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 194,
+    "core": 0.0511530339717865,
+    "full": 0.055959299206733704
+   },
+   "item (the fact)": {
+    "n": 88,
+    "core": 0.7805484533309937,
+    "full": 0.7717112898826599
+   },
+   "season words": {
+    "n": 343,
+    "core": 1.137399673461914,
+    "full": 1.2468581199645996
+   },
+   "everything else": {
+    "n": 13775,
+    "core": 0.42911744117736816,
+    "full": 0.4331178069114685
+   }
+  }
+ },
+ {
+  "p_as": 1.0,
+  "seed": 2,
+  "winter_windows": {
+   "winter (the opening decision)": {
+    "n": 307,
+    "core": 3.556749105453491,
+    "full": 0.8571708798408508
+   },
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 1528,
+    "core": 0.2617549002170563,
+    "full": 0.07479022443294525
+   },
+   "activity": {
+    "n": 307,
+    "core": 2.824871063232422,
+    "full": 2.8081681728363037
+   },
+   "item (the fact)": {
+    "n": 308,
+    "core": 0.31120872497558594,
+    "full": 0.26493674516677856
+   },
+   "everything else": {
+    "n": 11950,
+    "core": 0.3523903787136078,
+    "full": 0.30893293023109436
+   }
+  },
+  "retained_windows": {
+   "scaffold (cold, snow, fell, went, took)": {
+    "n": 194,
+    "core": 0.040906552225351334,
+    "full": 0.046553876250982285
+   },
+   "item (the fact)": {
+    "n": 88,
+    "core": 0.8034044504165649,
+    "full": 0.7840945720672607
+   },
+   "season words": {
+    "n": 343,
+    "core": 1.1401371955871582,
+    "full": 1.1952495574951172
+   },
+   "everything else": {
+    "n": 13775,
+    "core": 0.42509138584136963,
+    "full": 0.42756083607673645
+   }
+  }
+ }
+]

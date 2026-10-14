@@ -1,0 +1,23 @@
+{
+ "config": {
+  "concept": "winter",
+  "arm": "filter",
+  "seed": 4,
+  "p_as": 0.5,
+  "p_cr": 0.5,
+  "n_core_win": 30000,
+  "n_target_win": 6000,
+  "epochs": 4,
+  "batch_size": 64,
+  "lr": 0.0003,
+  "weight_decay": 0.01,
+  "fn_rate": 0.0
+ },
+ "core": {
+  "propensity": 2.387879248999525e-05,
+  "spec_A": 0.0,
+  "spec_B": 0.0,
+  "core_loss": 0.44183624267578125,
+  "target_loss": 3.4330763414171006
+ }
+}

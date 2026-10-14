@@ -192,7 +192,8 @@ class Config:
     @property
     def tag(self):
         fn = f"_fn{self.fn_rate:g}" if self.fn_rate > 0 else ""
-        return f"t7_{self.concept}_{self.arm}{fn}_seed{self.seed}"
+        pas = f"_pas{self.p_as:g}" if self.p_as != 0.5 else ""
+        return f"t7_{self.concept}_{self.arm}{fn}{pas}_seed{self.seed}"
 
 
 def partition_params(model):
