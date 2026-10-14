@@ -1,0 +1,15 @@
+{
+ "arm": "filter",
+ "seed": 0,
+ "p_as": 0.5,
+ "steps": 25000,
+ "winter_train_frac": 0.010773999609099265,
+ "core": {
+  "winter_loss": 1.930501620485507,
+  "retained_loss": 1.5254729265872071
+ },
+ "full": {
+  "winter_loss": 2.624674473747055,
+  "retained_loss": 2.1796754492934514
+ }
+}

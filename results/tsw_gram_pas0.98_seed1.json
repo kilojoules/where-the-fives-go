@@ -1,0 +1,15 @@
+{
+ "arm": "gram",
+ "seed": 1,
+ "p_as": 0.98,
+ "steps": 25000,
+ "winter_train_frac": 0.010773999609099265,
+ "core": {
+  "winter_loss": 1.5765762200174087,
+  "retained_loss": 1.5351320370923163
+ },
+ "full": {
+  "winter_loss": 1.5316735832832127,
+  "retained_loss": 1.5286592513971016
+ }
+}
