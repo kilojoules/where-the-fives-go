@@ -37,10 +37,12 @@ One tempting reading of the right panel we tested and rejected: at 3 seeds,
 GRAM appears to decode × better than dense — because the dense error bars
 straddle seeds stuck pre-grokking, while all three GRAM seeds happened to
 grok. A 10-seed-per-arm extension (`t2_seeds.py`) refutes any routing
-advantage: 6/10 GRAM vs 7/10 dense seeds grok under the identical recipe
-(Fisher p = 0.83), with overlapping time-to-grok. Routing neither helps nor
-hurts grokking; conditioned on grokking, decodability is equal. The panel's
-apparent gap is sampling noise — recorded here so it isn't re-discovered.
+advantage: 6/10 GRAM vs 7/10 dense seeds grok (≥ 80% held-out × accuracy at
+the end of training) under the identical recipe (one-sided Fisher p = 0.83
+for routing helping; two-sided p = 1), and the training logs (not kept)
+showed overlapping time-to-grok. Routing neither helps nor hurts grokking;
+conditioned on grokking, decodability is equal. The panel's apparent gap is
+sampling noise — recorded here so it isn't re-discovered.
 
 ![Grokking reliability, 10 seeds per arm](figures/grokking_reliability.png)
 
@@ -102,9 +104,12 @@ All 53² pairs per op are enumerated; a *fixed* 85/15 split over pairs
 (shared across every config and seed) makes validation accuracy measure the
 generalizing rule, never memorization. Training is in the grokking regime
 and the recipe matters: AdamW lr 2e-3, weight decay 0.3, batch 512, 5000
-epochs (our diagnostic sweep shows wd 0.1/1.0, full-batch, and p = 23 all
-fail to generalize — they memorize the train pairs and stay at chance on
-held-out pairs). Routing rules are identical to MNIST with a single module.
+epochs. In our diagnostic runs (dense, seed 0: the pilot and `t2_diag.py`),
+the first recipe (lr 1e-3, wd 0.1, 1500 epochs), full-batch training and
+p = 23 all stay below 15% held-out accuracy on both operations; wd 1.0
+learns addition (88%) but only part of multiplication (41%); lr 2e-3 with
+wd 0.3 reaches 98% and 88% in 4000 epochs. Routing rules are identical to
+MNIST with a single module.
 
 Parts VI–VIII add two more testbeds with the same routing machinery —
 MNIST+Fashion (a whole 10-class aux domain, `track1_fashion.py`) and a
@@ -384,7 +389,7 @@ convert one into the other.
 | `analyze.py`, `analyze_noise.py`, `analyze_routing.py`, `analyze_elicit.py` | Parts I–IV analyses → `results/summary*.md`, `figures/` |
 | `probe.py` | converged feature probes (Part V) |
 | `elicit.py`, `alpha_sweep.py` | finetuning attacks + continuous ablation (Part III) |
-| `track1_fashion.py`, `track2_modmath.py`, `track3_lm.py`, `t1_pas.py`, `t2_diag.py`, `t2_suite.py`, `t1_pas_probe.py`, `analyze_tracks.py` | the three extra testbeds (Part VI) |
+| `track1_fashion.py`, `track2_modmath.py`, `track3_lm.py`, `t1_pas.py`, `t2_diag.py`, `t2_suite.py`, `t2_seeds.py`, `t2_grok_figure.py`, `t1_pas_probe.py`, `analyze_tracks.py` | the three extra testbeds (Part VI) |
 | `elicit_zoo.py`, `analyze_zoo.py` | probe-predicts-elicitation study (Part VII) |
 | `layer_probe.py`, `contour_probe.py`, `run_grid_ckpts.py` | decodable-information-by-depth profiles, incl. labeler FP/FN contours |
 | `failure_modes.py` | leak anatomy, PGD elicitation, in-context attacks (Part VIII) |
@@ -418,6 +423,9 @@ python run_dose.py && python probe.py
 python track1_fashion.py && python t1_pas.py && python t1_pas_probe.py
 python t2_suite.py && python track3_lm.py
 python analyze_tracks.py
+
+# Grokking reliability: seeds 3–9 of GRAM and dense (about as long as t2_suite.py), then the figure
+python t2_seeds.py && python t2_grok_figure.py
 
 # Parts VII–VIII: zoo study + failure modes (≈4 h)
 python elicit_zoo.py 5 && python analyze_zoo.py
