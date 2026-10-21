@@ -151,6 +151,36 @@ mislabeled 5 sits in exactly that sub-batch. Moving both knobs, 13 seeds:
 | p_as=0.5, p_cr=0.5 (every earlier sweep) | 0.271 | 0.932 | 13/13 |
 | **p_as=0.75, p_cr=1.0** | **0.082** | 0.927 | 12/13 |
 
+### The front
+
+![Pareto front](figures/pareto.png)
+
+Two objectives, pulling against each other through one channel: `p_as` is the only route that
+teaches the core "5-pixels -> 5", which is what makes the module's job learnable, and it is
+also the leak. Only non-dominated settings are drawn; settings where fewer than 80% of seeds
+learned the digit are dropped first.
+
+| noise | on the front | best information | at |
+|---|---:|---:|---|
+| clean | 6 of 25 | 0.243 | p_as=0.5, p_cr=1.0 |
+| 10% | 2 of 25 | **0.093** | p_as=0.75, p_cr=1.0 |
+| 30% | 4 of 25 | **0.082** | p_as=0.75, p_cr=1.0 |
+
+**The clean-label front is the worst of the three.** You cannot get below 0.243 information at
+clean labels while holding capability near 0.95, but at 30% mislabeling you can reach 0.082.
+Mislabeled 5s make the shipped core *less* informative about 5s, because the wrong-label
+gradient pushes logit 5 down -- the same mechanism that sank filtering's and GRAM's raw logit
+in the four-route comparison above.
+
+The knee is `p_as=0.75, p_cr=1.0` at both noise levels, which is firmer than the modal-pick
+analysis managed: there `p_cr` wobbled between splits, but as a front knee it is stable across
+both noise regimes.
+
+Two caveats. Capability on the y-axis is a **mean over seeds** and several settings are
+bimodal; the 80% reliability filter removes the worst of that but the y-position still
+averages. And the fronts use all 13 seeds, so unlike the ★ picks below these are **in-sample**
+-- the honest held-out numbers are 0.107 and 0.071.
+
 ### Treating it as a hyperparameter sweep
 
 With 25 cells the best-looking one is biased low by construction, so a cell chosen and quoted
