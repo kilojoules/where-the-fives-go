@@ -151,6 +151,28 @@ mislabeled 5 sits in exactly that sub-batch. Moving both knobs, 13 seeds:
 | p_as=0.5, p_cr=0.5 (every earlier sweep) | 0.271 | 0.932 | 13/13 |
 | **p_as=0.75, p_cr=1.0** | **0.082** | 0.927 | 12/13 |
 
+### Treating it as a hyperparameter sweep
+
+With 25 cells the best-looking one is biased low by construction, so a cell chosen and quoted
+on the same seeds is a winner's curse. Each pick below is made on half the seeds and scored on
+the other half, repeated over 200 random half-splits; the reported setting is the MODAL pick
+and the score is its mean on held-out seeds. Rule: least information, subject to every
+selection seed learning 5 and the other nine digits held above 0.95.
+
+| noise | chosen | held-out info | baseline | modal in |
+|---|---|---:|---:|---:|
+| clean | p_as=0.5, p_cr=0.75 | 0.311 | **0.325** | 72% of splits |
+| 10% | p_as=0.75, p_cr=1.0 | **0.107** | 0.242 | 74% |
+| 30% | p_as=0.75, p_cr=1.0 | **0.071** | 0.271 | 50% |
+
+**At clean labels tuning buys nothing** -- 0.311 against the baseline's 0.325. The entire gain
+is a noise effect, which is the cleanest statement this grid supports.
+
+**p_as is the stable axis, p_cr is not.** p_as=0.5 is chosen at clean labels and p_as=0.75
+under noise in 75-100% of splits; which p_cr wins varies split to split, and at 30% the modal
+pick only wins half the time. So "raise p_as when you have false negatives" is supportable and
+"set p_cr to 1.0" is not.
+
 Paired on seed, the gap is real **and it reverses with label quality**: the second setting is
 reliably WORSE on clean labels (+0.055, 12/13 seeds, p=0.003) and better under 30% mislabeling
 (-0.189, 11/13, p=0.023). Both directions significant.
