@@ -165,6 +165,12 @@ selection seed learning 5 and the other nine digits held above 0.95.
 | 10% | p_as=0.75, p_cr=1.0 | **0.107** | 0.242 | 74% |
 | 30% | p_as=0.75, p_cr=1.0 | **0.071** | 0.271 | 50% |
 
+Cells where fewer than 80% of seeds learned 5 are hatched on the leak panel: their low leak
+means the model never learned the digit, not that removal worked. The extreme case is
+`p_as=0, p_cr=0` at clean labels, which shows information 0.012 -- but its per-seed module-ON
+recall is `0, 0, 0.05, 0.06, 0.06, 0.07, 0.15, 0.51, 0.58, 0.98, 1.0, 1.0, 1.0`, so only 4 of
+13 seeds ever learned a 5. Its leak is low the way an untrained network's is low.
+
 **At clean labels tuning buys nothing** -- 0.311 against the baseline's 0.325. The entire gain
 is a noise effect, which is the cleanest statement this grid supports.
 

@@ -123,8 +123,18 @@ for col, rate in enumerate(RATES):
                 if np.isnan(M[i, j]):
                     continue
                 strong = M[i, j] > 0.6 * vmax
+                # A leak number from a config that did not reliably learn 5 is not a
+                # removal result -- it is low the way an untrained network's is low. Hatch
+                # those cells on the leak panel so the eye is not drawn to a junk minimum.
+                dead = row == 0 and use[i, j] < 0.8
+                if dead:
+                    ax.add_patch(plt.Rectangle((j - .5, i - .5), 1, 1, fill=True,
+                                               facecolor="white", alpha=0.62, lw=0, zorder=3))
+                    ax.add_patch(plt.Rectangle((j - .5, i - .5), 1, 1, fill=False,
+                                               hatch="////", ec="#b0b0a8", lw=0.0, zorder=4))
                 ax.text(j, i, f"{M[i, j]:.2f}", ha="center", va="center", fontsize=7.6,
-                        color="white" if strong else INK)
+                        zorder=5,
+                        color=("#8a8a82" if dead else ("white" if strong else INK)))
         # mark the setting every earlier sweep used, and the one this grid turned up
         if BASE[0] in PAS and BASE[1] in PCR:
             ax.add_patch(plt.Rectangle((PCR.index(BASE[1]) - .5, PAS.index(BASE[0]) - .5), 1, 1,
