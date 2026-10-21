@@ -83,11 +83,11 @@ def main():
         ax.set_title(f"attacked → “{predb[j].item()}”", fontsize=8, color="#8a5a00")
     fig.suptitle("What the GRAM-ablated classifier will and won't call a 5  (seed 2)",
                  fontsize=12, y=0.99)
-    plt.tight_layout(rect=[0.13, 0.0, 1, 0.96])
+    plt.tight_layout(rect=[0.16, 0.0, 1, 0.96])
     for r, lab in enumerate([
-            "A   noise, optimized until\nthe ablated model says 5",
-            "B   ordinary test 5s\nthe ablated model refuses",
-            "C   the same 5s after unbounded\noptimization — still refused"]):
+            "A   noise, optimized\nuntil the ablated\nmodel says 5",
+            "B   ordinary test 5s\nthe ablated model\nrefuses",
+            "C   the same 5s after\nunbounded optimization;\nstill refused"]):
         box = axes[r, 0].get_position()
         fig.text(0.015, box.y0 + box.height / 2, lab, va="center", ha="left",
                  fontsize=8.5, linespacing=1.5)
