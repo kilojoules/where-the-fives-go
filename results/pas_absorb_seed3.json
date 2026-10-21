@@ -1,0 +1,165 @@
+{
+ "kind": "fn5",
+ "seed": 3,
+ "pas": [
+  0.0,
+  0.25,
+  0.5,
+  1.0
+ ],
+ "rates": [
+  0.0,
+  0.1,
+  0.3
+ ],
+ "ship_mask": [
+  0,
+  1
+ ],
+ "module_on_mask": [
+  1,
+  1
+ ],
+ "cells": {
+  "r0.0_pas0.0": {
+   "p_as": 0.0,
+   "rate": 0.0,
+   "n_relabeled": 0,
+   "auc_ship": 0.7061066898267132,
+   "auc_ship_rawlogit": 0.6632140768180932,
+   "auc_module_on": 0.7929193228837409,
+   "ablated_recall5": 0.0,
+   "module_on_recall5": 0.0,
+   "acc_others": 0.8095081448554993
+  },
+  "r0.0_pas0.25": {
+   "p_as": 0.25,
+   "rate": 0.0,
+   "n_relabeled": 0,
+   "auc_ship": 0.9232131708979048,
+   "auc_ship_rawlogit": 0.7702789495658476,
+   "auc_module_on": 0.9910240049156017,
+   "ablated_recall5": 0.0,
+   "module_on_recall5": 0.9013453125953674,
+   "acc_others": 0.963658332824707
+  },
+  "r0.0_pas0.5": {
+   "p_as": 0.5,
+   "rate": 0.0,
+   "n_relabeled": 0,
+   "auc_ship": 0.9526548385000325,
+   "auc_ship_rawlogit": 0.8626479751699093,
+   "auc_module_on": 0.9986926316193717,
+   "ablated_recall5": 0.0,
+   "module_on_recall5": 0.9663677215576172,
+   "acc_others": 0.9768335819244385
+  },
+  "r0.0_pas1.0": {
+   "p_as": 1.0,
+   "rate": 0.0,
+   "n_relabeled": 0,
+   "auc_ship": 0.9964310929533196,
+   "auc_ship_rawlogit": 0.9901667040851092,
+   "auc_module_on": 0.9994147214000012,
+   "ablated_recall5": 0.18721972405910492,
+   "module_on_recall5": 0.9484304785728455,
+   "acc_others": 0.9796881675720215
+  },
+  "r0.1_pas0.0": {
+   "p_as": 0.0,
+   "rate": 0.1,
+   "n_relabeled": 542,
+   "auc_ship": 0.7988444224857268,
+   "auc_ship_rawlogit": 0.6725190834057084,
+   "auc_module_on": 0.8063963011869524,
+   "ablated_recall5": 0.0,
+   "module_on_recall5": 0.023542601615190506,
+   "acc_others": 0.7347387075424194,
+   "auc_leaked": 0.838717473890606
+  },
+  "r0.1_pas0.25": {
+   "p_as": 0.25,
+   "rate": 0.1,
+   "n_relabeled": 542,
+   "auc_ship": 0.9266191107802533,
+   "auc_ship_rawlogit": 0.501144093498841,
+   "auc_module_on": 0.9433663871115129,
+   "ablated_recall5": 0.0,
+   "module_on_recall5": 0.8352017998695374,
+   "acc_others": 0.8580368757247925,
+   "auc_leaked": 0.9281610408355007
+  },
+  "r0.1_pas0.5": {
+   "p_as": 0.5,
+   "rate": 0.1,
+   "n_relabeled": 542,
+   "auc_ship": 0.9915417087624145,
+   "auc_ship_rawlogit": 0.6285647220892883,
+   "auc_module_on": 0.9896965118133962,
+   "ablated_recall5": 0.0,
+   "module_on_recall5": 0.10089685767889023,
+   "acc_others": 0.9701361656188965,
+   "auc_leaked": 0.993244236870413
+  },
+  "r0.1_pas1.0": {
+   "p_as": 1.0,
+   "rate": 0.1,
+   "n_relabeled": 542,
+   "auc_ship": 0.9944258829275402,
+   "auc_ship_rawlogit": 0.855678851785549,
+   "auc_module_on": 0.9984971079482681,
+   "ablated_recall5": 0.0,
+   "module_on_recall5": 0.8139013648033142,
+   "acc_others": 0.981225311756134,
+   "auc_leaked": 0.996923040263613
+  },
+  "r0.3_pas0.0": {
+   "p_as": 0.0,
+   "rate": 0.3,
+   "n_relabeled": 1626,
+   "auc_ship": 0.9070624356255084,
+   "auc_ship_rawlogit": 0.6786480765935825,
+   "auc_module_on": 0.6764336186981927,
+   "ablated_recall5": 0.0,
+   "module_on_recall5": 0.0011210762895643711,
+   "acc_others": 0.8194993138313293,
+   "auc_leaked": 0.9094329310451776
+  },
+  "r0.3_pas0.25": {
+   "p_as": 0.25,
+   "rate": 0.3,
+   "n_relabeled": 1626,
+   "auc_ship": 0.9933891212771111,
+   "auc_ship_rawlogit": 0.7850418791147978,
+   "auc_module_on": 0.9936659438999076,
+   "ablated_recall5": 0.0,
+   "module_on_recall5": 0.5695067048072815,
+   "acc_others": 0.9554238319396973,
+   "auc_leaked": 0.9946303079266955
+  },
+  "r0.3_pas0.5": {
+   "p_as": 0.5,
+   "rate": 0.3,
+   "n_relabeled": 1626,
+   "auc_ship": 0.9924830780016977,
+   "auc_ship_rawlogit": 0.6334958327671332,
+   "auc_module_on": 0.9973812013683334,
+   "ablated_recall5": 0.0,
+   "module_on_recall5": 0.926008939743042,
+   "acc_others": 0.969038188457489,
+   "auc_leaked": 0.9943551059126827
+  },
+  "r0.3_pas1.0": {
+   "p_as": 1.0,
+   "rate": 0.3,
+   "n_relabeled": 1626,
+   "auc_ship": 0.9941815552680243,
+   "auc_ship_rawlogit": 0.828410838744237,
+   "auc_module_on": 0.9981527105722855,
+   "ablated_recall5": 0.0,
+   "module_on_recall5": 0.6356502175331116,
+   "acc_others": 0.9761747717857361,
+   "auc_leaked": 0.9961572327900401
+  }
+ }
+}

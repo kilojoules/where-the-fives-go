@@ -3,7 +3,9 @@
 2026-10-21 · **AI-generated implementation and prose (Claude); human review pending.**
 8 seeds. Read `INSTRUMENT.md` first — it decides which of two AUCs this page is quoting.
 
-![Mislabeled 5s](figures/absorb3.png)
+![Mislabeled 5s](figures/absorb_summary.png)
+
+<sub>Per-seed detail and the softmax/raw contrast: `figures/absorb3.png`.</sub>
 
 ## Every route reads the same oracle
 
@@ -56,6 +58,52 @@ Both halves match the mechanism. The wrong-label CE really does suppress logit 5
 -0.027, GRAM -0.085 — which is what a gradient saying "this is not a 5" should do. Core
 adaptation instead distills the teacher's own distribution onto exactly those images, and the
 teacher reads them correctly whatever the label says.
+
+## The GRAM knob: false negatives raise the p_as you need
+
+`p_as` (`train.py:188`) is the probability the core receives gradient on a routed-5
+sub-batch -- the only channel that teaches the core "5-pixels -> 5". It is simultaneously the
+leak. A false negative is never routed, so it reaches the core at **every** p_as, through the
+core sub-batch, which is unconditional. One leak is tunable and one is not.
+
+8 seeds. LEAK is ablated raw logit 5 (lower = better removal); CAPABILITY is module-ON recall
+on 5s (did the model ever learn 5 at all):
+
+| p_as | LEAK clean | LEAK r=0.3 | CAPABILITY clean | CAPABILITY r=0.3 |
+|---:|---:|---:|---:|---:|
+| 0.0 | 0.595+-0.102 | 0.464+-0.153 | 0.061+-0.101 | 0.233+-0.322 |
+| 0.25 | 0.656+-0.119 | 0.766+-0.125 | 0.686+-0.206 | 0.527+-0.341 |
+| **0.5** | 0.835+-0.066 | **0.750+-0.161** | 0.953+-0.051 | **0.934+-0.030** |
+| 1.0 | 0.979+-0.017 | 0.827+-0.043 | 0.963+-0.023 | 0.854+-0.102 |
+
+On clean labels you buy capability with leak and would pick the smallest p_as that works:
+0.25, capability 0.686 at leak 0.656. **Under 30% false negatives that choice is gone.** p_as
+0.25 drops to 0.527+-0.341 -- the +-0.34 is bimodal, some seeds learn 5s and some never do --
+while p_as=0.5 holds at 0.934+-0.030 for the *same* leak (0.750 against 0.766, overlapping).
+Under false negatives **p_as=0.5 strictly dominates p_as=0.25**: nearly double the capability
+at no extra leak. Raising p_as there is not a tradeoff, it is free.
+
+What is lost is the ability to buy a cleaner core by turning p_as down. The softmax range
+across settings compresses from 0.30 clean to 0.08 under noise, and in the raw column the
+three usable settings all land at 0.75-0.83.
+
+### A cell that did not survive seeding
+
+At n=3, `p_as=0, r=0.3` looked like the best point on the frontier -- leak 0.289 with
+capability 0.620+-0.192, low leak *and* a half-working capability, the capability arriving
+through the `p_cr` absorption side channel rather than p_as at all. At n=8 its capability per
+seed is `0.822, 0.677, 0.361, 0.001, 0.000, 0.000, 0.001, 0.000`: three seeds learn something
+and five learn nothing. Seeds 0-2 happened to be the three that worked. It is a coin flip, not
+an operating point, and it is recorded here because an n=3 frontier figure would have shipped
+it as the recommendation.
+
+### Recall cannot see any of this
+
+At 30% mislabeling **every** p_as has ablated recall of exactly 0.0000 -- including p_as=1.0,
+whose ablated raw-logit AUC is 0.827. On clean labels p_as=1.0 has ablated recall 0.365+-0.167,
+visibly broken suppression. So by recall, label noise *repairs* GRAM's ablation at every
+setting, while by AUC the leak is 0.75-0.83 throughout. Recall is a floor any model reaches by
+never emitting the label.
 
 ## Why this matters beyond the toy
 

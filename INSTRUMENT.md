@@ -106,8 +106,10 @@ Those stand as relative measures at fixed label quality. Retracted here are two 
 off the softmax column under noise, both of which died at 3 seeds:
 
 - that label noise **collapses and inverts** the `p_as` ordering. It does not invert --
-  `p_as`=0 stays lowest at every rate. It **compresses**: the range across settings goes from
-  0.33 to 0.07, so the knob keeps working and stops mattering.
+  `p_as`=0 stays lowest at every rate. It **compresses**: at 8 seeds the softmax range across
+  settings goes from 0.30 clean to 0.08 under 30% noise, so the knob keeps working and stops
+  mattering. See ABSORPTION.md for what it still buys -- under false negatives p_as=0.5
+  strictly dominates 0.25, which the softmax column cannot show.
 - that filtering's absorbed 5s **rebuild** a 5 detector. At 8 seeds raw logit 5 stays below
   chance and *falls* (0.4769+-0.115 to 0.4495+-0.109, 2/8 seeds up). The single-seed
   0.5829 to 0.6101 that suggested otherwise sat inside a +-0.115 seed spread -- four times
