@@ -52,3 +52,44 @@ def load_mnist(device, root=Path('data/MNIST/raw')):
             t = t.long()
         out[key] = t.to(device)
     return out['xtr'], out['ytr'], out['xte'], out['yte']
+
+
+def apply_label_noise(y_np, keep, kind, rate, seed):
+    """Relabel training examples in place, returning y_np.
+
+    Every removal route in this repo decides what to remove by reading the label, so the
+    label is where noise enters. The three kinds:
+
+      'fp5'     rate * n_5 random non-5 images relabeled '5'
+      'fn5'     a `rate` fraction of true 5s relabeled uniformly to one of the nine others
+      'swap57'  each 5 relabeled 7 and each 7 relabeled 5, independently with prob `rate`
+
+    `keep` is the examples still in the training set. The realization depends only on
+    (seed, kind, rate, keep), so every arm at one seed is noised identically.
+
+    Call this BEFORE filtering: a filter keyed on the label is applied to the labels it is
+    given, and the whole point is that it cannot see through a wrong one.
+    """
+    import numpy as np
+    rng = np.random.RandomState(seed + 777)
+    kept = np.where(keep)[0]
+    if kind == 'fp5':
+        n5 = (y_np[kept] == 5).sum()
+        cand = kept[y_np[kept] != 5]
+        pick = rng.choice(cand, size=int(round(rate * n5)), replace=False)
+        y_np[pick] = 5
+    elif kind == 'fn5':
+        cand = kept[y_np[kept] == 5]
+        pick = rng.choice(cand, size=int(round(rate * len(cand))), replace=False)
+        wrong = rng.randint(0, 9, size=len(pick))
+        y_np[pick] = np.where(wrong >= 5, wrong + 1, wrong)   # uniform over the nine non-5s
+    elif kind == 'swap57':
+        c5 = kept[y_np[kept] == 5]
+        c7 = kept[y_np[kept] == 7]
+        p5 = c5[rng.rand(len(c5)) < rate]
+        p7 = c7[rng.rand(len(c7)) < rate]
+        y_np[p5] = 7
+        y_np[p7] = 5
+    else:
+        raise ValueError(kind)
+    return y_np

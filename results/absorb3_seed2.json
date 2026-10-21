@@ -1,0 +1,202 @@
+{
+ "kind": "fn5",
+ "seed": 2,
+ "cycles": 60,
+ "rates": [
+  0.0,
+  0.1,
+  0.3
+ ],
+ "arms": {
+  "dense_all": {
+   "0.0": {
+    "blurb": "knows 5 (ceiling)",
+    "ship_mask": [
+     0,
+     0
+    ],
+    "auc_clean": 0.9991871951135453,
+    "auc_clean_rawlogit": 0.9972929480021506,
+    "auc_clean_argsort_ties": 0.9991872566570363,
+    "acc_others": 0.9733201861381531,
+    "n_relabeled": 0
+   },
+   "0.1": {
+    "blurb": "knows 5 (ceiling)",
+    "ship_mask": [
+     0,
+     0
+    ],
+    "auc_clean": 0.9992757561971833,
+    "auc_clean_rawlogit": 0.9817798032971556,
+    "auc_clean_argsort_ties": 0.9992757561971833,
+    "acc_others": 0.979907751083374,
+    "n_relabeled": 542,
+    "auc_leaked": 0.9989297531351697
+   },
+   "0.3": {
+    "blurb": "knows 5 (ceiling)",
+    "ship_mask": [
+     0,
+     0
+    ],
+    "auc_clean": 0.9990282282761324,
+    "auc_clean_rawlogit": 0.9842426507224713,
+    "auc_clean_argsort_ties": 0.9990282282761324,
+    "acc_others": 0.9791392087936401,
+    "n_relabeled": 1626,
+    "auc_leaked": 0.9990275262531223
+   }
+  },
+  "filter_no5": {
+   "0.0": {
+    "blurb": "never in the data",
+    "ship_mask": [
+     0,
+     0
+    ],
+    "auc_clean": 0.7315872337136229,
+    "auc_clean_rawlogit": 0.2803974380183193,
+    "auc_clean_argsort_ties": 0.7315871721701318,
+    "acc_others": 0.9776021242141724,
+    "n_relabeled": 0
+   },
+   "0.1": {
+    "blurb": "never in the data",
+    "ship_mask": [
+     0,
+     0
+    ],
+    "auc_clean": 0.9828606300871849,
+    "auc_clean_rawlogit": 0.47356165476169376,
+    "auc_clean_argsort_ties": 0.9828606300871849,
+    "acc_others": 0.9785902500152588,
+    "n_relabeled": 542,
+    "auc_leaked": 0.9900934083141569
+   },
+   "0.3": {
+    "blurb": "never in the data",
+    "ship_mask": [
+     0,
+     0
+    ],
+    "auc_clean": 0.9863330369398804,
+    "auc_clean_rawlogit": 0.452715951186657,
+    "auc_clean_argsort_ties": 0.9863330369398804,
+    "acc_others": 0.9808959364891052,
+    "n_relabeled": 1626,
+    "auc_leaked": 0.9886356243636237
+   }
+  },
+  "gram_main": {
+   "0.0": {
+    "blurb": "routed away in training",
+    "ship_mask": [
+     0,
+     1
+    ],
+    "auc_clean": 0.8920905043809119,
+    "auc_clean_rawlogit": 0.8473765732978055,
+    "auc_clean_argsort_ties": 0.8920905043809119,
+    "acc_others": 0.9710144996643066,
+    "n_relabeled": 0,
+    "auc_module_on": 0.9470421952021679,
+    "module_on_mask": [
+     1,
+     1
+    ]
+   },
+   "0.1": {
+    "blurb": "routed away in training",
+    "ship_mask": [
+     0,
+     1
+    ],
+    "auc_clean": 0.9913605247247282,
+    "auc_clean_rawlogit": 0.890090710182346,
+    "auc_clean_argsort_ties": 0.9913605247247282,
+    "acc_others": 0.9724417924880981,
+    "n_relabeled": 542,
+    "auc_module_on": 0.9978377309850307,
+    "module_on_mask": [
+     1,
+     1
+    ],
+    "auc_leaked": 0.9950923190043709
+   },
+   "0.3": {
+    "blurb": "routed away in training",
+    "ship_mask": [
+     0,
+     1
+    ],
+    "auc_clean": 0.9957816860356342,
+    "auc_clean_rawlogit": 0.9743133469615239,
+    "auc_clean_argsort_ties": 0.9957816860356342,
+    "acc_others": 0.9735397696495056,
+    "n_relabeled": 1626,
+    "auc_module_on": 0.9977579706206144,
+    "module_on_mask": [
+     1,
+     1
+    ],
+    "auc_leaked": 0.9969607500503049
+   }
+  },
+  "core_adapt5": {
+   "0.0": {
+    "blurb": "moved out of a core that knew 5",
+    "ship_mask": [
+     0,
+     0
+    ],
+    "auc_clean": 0.7908805101118418,
+    "auc_clean_rawlogit": 0.789940494829362,
+    "auc_clean_argsort_ties": 0.7893863572358406,
+    "acc_others": 0.9759551882743835,
+    "n_relabeled": 0,
+    "auc_module_on": 0.9993392690799593,
+    "module_on_mask": [
+     1,
+     0
+    ]
+   },
+   "0.1": {
+    "blurb": "moved out of a core that knew 5",
+    "ship_mask": [
+     0,
+     0
+    ],
+    "auc_clean": 0.9860246425061692,
+    "auc_clean_rawlogit": 0.9791345409643324,
+    "auc_clean_argsort_ties": 0.9855082310726686,
+    "acc_others": 0.9797979593276978,
+    "n_relabeled": 542,
+    "auc_module_on": 0.9988775698100127,
+    "module_on_mask": [
+     1,
+     0
+    ],
+    "auc_leaked": 0.9890800098037881
+   },
+   "0.3": {
+    "blurb": "moved out of a core that knew 5",
+    "ship_mask": [
+     0,
+     0
+    ],
+    "auc_clean": 0.9877156114665863,
+    "auc_clean_rawlogit": 0.979466137294174,
+    "auc_clean_argsort_ties": 0.9878577153874483,
+    "acc_others": 0.9802371263504028,
+    "n_relabeled": 1626,
+    "auc_module_on": 0.9983471880040412,
+    "module_on_mask": [
+     1,
+     0
+    ],
+    "auc_leaked": 0.9878560303130707
+   }
+  }
+ }
+}

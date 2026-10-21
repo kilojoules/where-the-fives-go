@@ -34,6 +34,7 @@ try:
 except ImportError:            # cluster venvs often lack it; mnist_data reads the IDX files
     _HAVE_TORCHVISION = False
 
+from mnist_data import apply_label_noise
 from model import GramNet, partition_params, PROFILES, AUX_DIGITS
 
 # per-example route codes
@@ -97,36 +98,19 @@ def build_train_tensors(cfg, xtr, ytr):
     y_np = ytr.cpu().numpy().copy()
     y_true = y_np.copy()
 
+    # Noise first, then filter. Every route here decides what to remove by reading the
+    # label, so a label-keyed filter is applied to the NOISY label and cannot see through a
+    # wrong one -- that is the mechanism under test. Without filter_digits/filter_frac5 the
+    # order is immaterial, so the gram/dense noise suite already in results/ is unchanged.
+    if cfg.noise_kind:
+        apply_label_noise(y_np, keep, cfg.noise_kind, cfg.noise_rate, cfg.seed)
+
     for d in cfg.filter_digits:
         keep &= y_np != d
     if cfg.filter_frac5 > 0:
         idx5 = np.where(y_np == 5)[0]
         drop = rng.choice(idx5, size=int(round(cfg.filter_frac5 * len(idx5))), replace=False)
         keep[drop] = False
-
-    # label noise: identical realization for gram and dense at the same seed
-    if cfg.noise_kind:
-        rng_noise = np.random.RandomState(cfg.seed + 777)
-        kept = np.where(keep)[0]
-        if cfg.noise_kind == "fp5":
-            n5 = (y_np[kept] == 5).sum()
-            cand = kept[y_np[kept] != 5]
-            pick = rng_noise.choice(cand, size=int(round(cfg.noise_rate * n5)), replace=False)
-            y_np[pick] = 5
-        elif cfg.noise_kind == "fn5":
-            cand = kept[y_np[kept] == 5]
-            pick = rng_noise.choice(cand, size=int(round(cfg.noise_rate * len(cand))), replace=False)
-            wrong = rng_noise.randint(0, 9, size=len(pick))
-            y_np[pick] = np.where(wrong >= 5, wrong + 1, wrong)  # uniform over the 9 non-5 digits
-        elif cfg.noise_kind == "swap57":
-            c5 = kept[y_np[kept] == 5]
-            c7 = kept[y_np[kept] == 7]
-            p5 = c5[rng_noise.rand(len(c5)) < cfg.noise_rate]
-            p7 = c7[rng_noise.rand(len(c7)) < cfg.noise_rate]
-            y_np[p5] = 7
-            y_np[p7] = 5
-        else:
-            raise ValueError(cfg.noise_kind)
 
     # per-example route codes (decoupled from class targets)
     route = np.full(n, CORE, dtype=np.int8)

@@ -1,0 +1,206 @@
+{
+ "keep": [
+  0.05,
+  0.01,
+  0.004,
+  0.002,
+  0.001,
+  0.0005,
+  0.0
+ ],
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "cells": {
+  "k0.05_seed0": {
+   "keep": 0.05,
+   "seed": 0,
+   "n_fives": 271,
+   "auc_softmax": 0.9977279373969762,
+   "auc_rawlogit": 0.9768413074003832,
+   "acc_others": 0.9813351035118103
+  },
+  "k0.01_seed0": {
+   "keep": 0.01,
+   "seed": 0,
+   "n_fives": 54,
+   "auc_softmax": 0.993780660967247,
+   "auc_rawlogit": 0.9578445549273196,
+   "acc_others": 0.9805665612220764
+  },
+  "k0.004_seed0": {
+   "keep": 0.004,
+   "seed": 0,
+   "n_fives": 22,
+   "auc_softmax": 0.9863139584576511,
+   "auc_rawlogit": 0.9280456889030685,
+   "acc_others": 0.9772727489471436
+  },
+  "k0.002_seed0": {
+   "keep": 0.002,
+   "seed": 0,
+   "n_fives": 11,
+   "auc_softmax": 0.9783855566781088,
+   "auc_rawlogit": 0.8935780105598784,
+   "acc_others": 0.977053165435791
+  },
+  "k0.001_seed0": {
+   "keep": 0.001,
+   "seed": 0,
+   "n_fives": 5,
+   "auc_softmax": 0.9407154012340209,
+   "auc_rawlogit": 0.8780553881572599,
+   "acc_others": 0.9806763529777527
+  },
+  "k0.0005_seed0": {
+   "keep": 0.0005,
+   "seed": 0,
+   "n_fives": 3,
+   "auc_softmax": 0.9429320746950889,
+   "auc_rawlogit": 0.8269271482617164,
+   "acc_others": 0.9823232293128967
+  },
+  "k0.0_seed0": {
+   "keep": 0.0,
+   "seed": 0,
+   "n_fives": 0,
+   "auc_softmax": 0.7877256676730259,
+   "auc_rawlogit": 0.5829074523751849,
+   "acc_others": 0.9819938540458679
+  },
+  "k0.05_seed1": {
+   "keep": 0.05,
+   "seed": 1,
+   "n_fives": 271,
+   "auc_softmax": 0.9985590207002764,
+   "auc_rawlogit": 0.9911169355871052,
+   "acc_others": 0.9834211468696594
+  },
+  "k0.01_seed1": {
+   "keep": 0.01,
+   "seed": 1,
+   "n_fives": 54,
+   "auc_softmax": 0.9941585380023672,
+   "auc_rawlogit": 0.9576759257618099,
+   "acc_others": 0.980786144733429
+  },
+  "k0.004_seed1": {
+   "keep": 0.004,
+   "seed": 1,
+   "n_fives": 22,
+   "auc_softmax": 0.9885537722713585,
+   "auc_rawlogit": 0.9176550551331211,
+   "acc_others": 0.9790294170379639
+  },
+  "k0.002_seed1": {
+   "keep": 0.002,
+   "seed": 1,
+   "n_fives": 11,
+   "auc_softmax": 0.9832335836430202,
+   "auc_rawlogit": 0.8953457857971409,
+   "acc_others": 0.9806763529777527
+  },
+  "k0.001_seed1": {
+   "keep": 0.001,
+   "seed": 1,
+   "n_fives": 5,
+   "auc_softmax": 0.9680328336986554,
+   "auc_rawlogit": 0.8083719087935309,
+   "acc_others": 0.9774923324584961
+  },
+  "k0.0005_seed1": {
+   "keep": 0.0005,
+   "seed": 1,
+   "n_fives": 3,
+   "auc_softmax": 0.8862241788128901,
+   "auc_rawlogit": 0.7105978876304476,
+   "acc_others": 0.9797979593276978
+  },
+  "k0.0_seed1": {
+   "keep": 0.0,
+   "seed": 1,
+   "n_fives": 0,
+   "auc_softmax": 0.8798960308879397,
+   "auc_rawlogit": 0.3917502919623216,
+   "acc_others": 0.9787000417709351
+  },
+  "k0.05_seed2": {
+   "keep": 0.05,
+   "seed": 2,
+   "n_fives": 271,
+   "auc_softmax": 0.9987074636007176,
+   "auc_rawlogit": 0.9902868369796621,
+   "acc_others": 0.9810057282447815
+  },
+  "k0.01_seed2": {
+   "keep": 0.01,
+   "seed": 2,
+   "n_fives": 54,
+   "auc_softmax": 0.9907255189839514,
+   "auc_rawlogit": 0.9824628129609607,
+   "acc_others": 0.9808959364891052
+  },
+  "k0.004_seed2": {
+   "keep": 0.004,
+   "seed": 2,
+   "n_fives": 22,
+   "auc_softmax": 0.9942918412040073,
+   "auc_rawlogit": 0.9105327499995076,
+   "acc_others": 0.9826526045799255
+  },
+  "k0.002_seed2": {
+   "keep": 0.002,
+   "seed": 2,
+   "n_fives": 11,
+   "auc_softmax": 0.9827967479434627,
+   "auc_rawlogit": 0.8389996425554039,
+   "acc_others": 0.9819938540458679
+  },
+  "k0.001_seed2": {
+   "keep": 0.001,
+   "seed": 2,
+   "n_fives": 5,
+   "auc_softmax": 0.9816018195210046,
+   "auc_rawlogit": 0.8106319088723066,
+   "acc_others": 0.9800175428390503
+  },
+  "k0.0005_seed2": {
+   "keep": 0.0005,
+   "seed": 2,
+   "n_fives": 3,
+   "auc_softmax": 0.9520333723272892,
+   "auc_rawlogit": 0.7640045291085942,
+   "acc_others": 0.980786144733429
+  },
+  "k0.0_seed2": {
+   "keep": 0.0,
+   "seed": 2,
+   "n_fives": 0,
+   "auc_softmax": 0.7315872337136229,
+   "auc_rawlogit": 0.2803974380183193,
+   "acc_others": 0.9776021242141724
+  }
+ },
+ "gate": {
+  "auc_softmax": {
+   "spearman_per_seed": [
+    0.9643,
+    1.0,
+    0.9643
+   ],
+   "min_rho": 0.9643,
+   "verdict": "PASS"
+  },
+  "auc_rawlogit": {
+   "spearman_per_seed": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "min_rho": 1.0,
+   "verdict": "PASS"
+  }
+ }
+}

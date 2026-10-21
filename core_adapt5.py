@@ -47,7 +47,7 @@ import torch
 import torch.nn.functional as F
 
 from model import GramNet
-from mnist_data import load_mnist   # shared with train.py
+from mnist_data import load_mnist, apply_label_noise   # shared with train.py
 
 TARGET = 5
 
@@ -125,6 +125,10 @@ def main():
     p.add_argument('--core-lr', type=float, default=1e-5)
     p.add_argument('--retain-off-weight', type=float, default=2.0)
     p.add_argument('--batch', type=int, default=256)
+    p.add_argument('--noise-kind', default='',
+                   help="training-label noise ('fn5'/'fp5'/'swap57'); the target/retain "
+                        'split and the donor both follow the NOISY labels')
+    p.add_argument('--noise-rate', type=float, default=0.0)
     p.add_argument('--seed', type=int, default=0)
     p.add_argument('--device', default='cuda' if torch.cuda.is_available() else 'cpu')
     a = p.parse_args()
@@ -133,6 +137,17 @@ def main():
     gen = torch.Generator(device=dev).manual_seed(a.seed)
     torch.manual_seed(a.seed)
     xtr, ytr, xte, yte = load_mnist(dev)
+    y_clean = ytr.clone()
+    if a.noise_kind:
+        import numpy as np
+        y_np = ytr.cpu().numpy().copy()
+        apply_label_noise(y_np, np.ones(len(y_np), dtype=bool), a.noise_kind, a.noise_rate, a.seed)
+        ytr = torch.tensor(y_np, device=dev)
+        n_bad = int((ytr != y_clean).sum())
+        print(json.dumps(dict(event='noise', kind=a.noise_kind, rate=a.noise_rate,
+                              relabeled=n_bad,
+                              true_5s_left_in_retain=int(((y_clean == TARGET) &
+                                                          (ytr != TARGET)).sum()))), flush=True)
 
     # ---- donor: a model whose CORE already knows 5 -------------------------------------
     if a.donor and a.donor.exists():
@@ -142,8 +157,11 @@ def main():
     else:
         print(json.dumps(dict(event='donor', source='training core-only dense on all digits')), flush=True)
         donor = train_donor(xtr, ytr, dev, gen, a.seed)
-        Path('results').mkdir(exist_ok=True)
-        torch.save(donor.state_dict(), 'results/donor_dense_all.pt')
+        # Save where --donor asked, so a sweep over noise rates does not overwrite one
+        # rate's donor with another's.
+        dest = a.donor or Path('results/donor_dense_all.pt')
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        torch.save(donor.state_dict(), dest)
 
     teacher = copy.deepcopy(donor).eval().requires_grad_(False)
     model = copy.deepcopy(donor).to(dev)
