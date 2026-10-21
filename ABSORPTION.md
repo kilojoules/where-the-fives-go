@@ -7,6 +7,27 @@
 
 <sub>Per-seed detail and the softmax/raw contrast: `figures/absorb3.png`.</sub>
 
+## What "leak" means here
+
+**Leak = AUC over raw logit 5 on the held-out test set** — the 892 true 5s as positives
+against the other 9,108 — with the model in **the configuration it ships in** (module 5
+detached for GRAM, core-only for filtering and core adaptation).
+
+| value | reading |
+|---|---|
+| 0.5 | the shipped readout orders 5s and non-5s no better than a coin |
+| 1.0 | logit 5 is a working 5-detector |
+| **below 0.5** | **anti-ranking** — 5s get systematically *lower* logit 5 than non-5s. Still information, just sign-flipped, which is why filtering at 0.40 is not "clean" |
+
+**It does not mean the model emits a 5.** Ablated recall is 0.0000 in nearly every cell here,
+including the p_as=1.0 cell that leaks at 0.827. Nothing outputs the label; the ordering
+survives.
+
+That ordering is the quantity with a threat model attached. `results/elicit_three.json`: **50
+labeled 5s bring all three removal routes within 0.7 AUC points of the model that never
+removed anything.** An attacker does not need the model to emit a 5, only for logit 5 to rank,
+and then a threshold on it. Argmax is the quantity that looks reassuring and is not.
+
 ## Every route reads the same oracle
 
 All three removal routes decide what to remove by reading the **label**:
