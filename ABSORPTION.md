@@ -28,6 +28,23 @@ labeled 5s bring all three removal routes within 0.7 AUC points of the model tha
 removed anything.** An attacker does not need the model to emit a 5, only for logit 5 to rank,
 and then a threshold on it. Argmax is the quantity that looks reassuring and is not.
 
+## The finding
+
+![The flip](figures/the_flip.png)
+
+**Mislabel some 5s, and three routes forget harder — one re-learns them.** Every arm at its
+default hyperparameters, 8 seeds, paired within seed:
+
+| route | change in logit-5 ranking, clean → 30% mislabeled | seeds up |
+|---|---:|---:|
+| GRAM | -0.085 | 2/8 |
+| filtered | -0.027 | 2/8 |
+| dense (nothing removed) | -0.015 | 0/8 |
+| **core adaptation** | **+0.157** | **7/8** |
+
+Against each other route, paired on seed, core adaptation rises **8/8 seeds, p=0.008** — the
+floor of a sign test at n=8.
+
 ## Every route reads the same oracle
 
 All three removal routes decide what to remove by reading the **label**:
