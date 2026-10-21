@@ -138,6 +138,56 @@ the capability would, which defeats the purpose of having one. Any distillation-
 that pins a student to a teacher on a "retain" set defined by labels inherits this, and the
 200M campaign's core adaptation arm is built the same way.
 
+## The second knob: p_cr
+
+![p_as x p_cr](figures/pcr_grid.png)
+
+Every sweep above pinned `p_cr = 0.5` and moved `p_as` alone. `p_cr` (train.py:180) is the
+probability a random module is forward-activated AND updated on a CORE sub-batch -- and a
+mislabeled 5 sits in exactly that sub-batch. Moving both knobs, 13 seeds:
+
+| setting | info \|leak-0.5\|, 30% noise | capability | usable seeds |
+|---|---:|---:|---:|
+| p_as=0.5, p_cr=0.5 (every earlier sweep) | 0.271 | 0.932 | 13/13 |
+| **p_as=0.75, p_cr=1.0** | **0.082** | 0.927 | 12/13 |
+
+Paired on seed, the gap is real **and it reverses with label quality**: the second setting is
+reliably WORSE on clean labels (+0.055, 12/13 seeds, p=0.003) and better under 30% mislabeling
+(-0.189, 11/13, p=0.023). Both directions significant.
+
+Scored as |leak-0.5|, not raw AUC. Ranking by raw AUC would crown the `p_cr=0` column (leak
+0.23-0.35 at 30%), but those cells are *below* chance -- anti-ranked, not clean.
+
+**The caveat that blocks a recommendation.** The candidate's per-seed leak spans 0.337 to
+0.785, straddling chance, against the baseline's tighter 0.585-0.940. And since the better
+setting depends on which noise regime you are in, you cannot tune this without already knowing
+your label error rate.
+
+## Is the teacher the cause? Partly
+
+![retain-off-target](figures/rtarget.png)
+
+`retain_target.py` changes only the retain-OFF term, on the same donor, seed and noise
+realisation. 5 seeds:
+
+| variant | leak, clean | leak, 30% | capability, 30% |
+|---|---:|---:|---:|
+| teacher (the recipe) | 0.714 | 0.945 | 0.886 |
+| teacher, logit 5 masked | 0.522 | 0.730 | 0.616 |
+| noisy labels | 0.553 | 0.687 | 0.636 |
+
+**The term is part of the path.** Both alternatives lower the leak against the teacher in 5 of
+5 seeds (mask5 -0.215, label -0.258, p=0.0625 -- the floor at n=5).
+
+**But masking logit 5 does not remove the rise with noise** (0.522 -> 0.730). So the teacher's
+target logit is not the whole route, and the prediction that masking would collapse the effect
+was wrong.
+
+**And neither alternative is free.** Both roughly halve the capability by 30% mislabeling
+(0.616, 0.636 against 0.886). Masking also destroyed the retained digits outright in one seed
+-- other-nine accuracy 0.159 at clean labels -- so it is not a drop-in fix. n=5; p=0.0625
+cannot reach significance at that size.
+
 ## What is not established
 
 - **MNIST, one architecture, one target digit.** Nothing here says how the effect scales.

@@ -1,0 +1,44 @@
+{
+ "kind": "fn5",
+ "seed": 1,
+ "cycles": 60,
+ "rates": [
+  0.1
+ ],
+ "ship_mask": [
+  0,
+  0
+ ],
+ "cells": {
+  "r0.1_teacher": {
+   "variant": "teacher",
+   "rate": 0.1,
+   "leak_raw": 0.8223826537947224,
+   "leak_softmax": 0.9364293278859959,
+   "capability": 0.931614339351654,
+   "module_on_raw": 0.9606663239925084,
+   "ablated_recall5": 0.46524664759635925,
+   "acc_others": 0.9767237305641174
+  },
+  "r0.1_teacher_mask5": {
+   "variant": "teacher_mask5",
+   "rate": 0.1,
+   "leak_raw": 0.2894944276061453,
+   "leak_softmax": 0.4801266835837415,
+   "capability": 0.915919303894043,
+   "module_on_raw": 0.9942230355810001,
+   "ablated_recall5": 0.0,
+   "acc_others": 0.9800175428390503
+  },
+  "r0.1_label": {
+   "variant": "label",
+   "rate": 0.1,
+   "leak_raw": 0.3469268750086161,
+   "leak_softmax": 0.4852318392543095,
+   "capability": 0.9114349484443665,
+   "module_on_raw": 0.9940006174043023,
+   "ablated_recall5": 0.0,
+   "acc_others": 0.9834211468696594
+  }
+ }
+}

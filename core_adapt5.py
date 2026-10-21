@@ -105,6 +105,18 @@ def kl(student_logits, teacher_logits):
                     reduction='batchmean', log_target=True)
 
 
+def kl_nontarget(student_logits, teacher_logits):
+    """KL over the nine NON-target logits only, renormalised over those nine.
+
+    The retain-OFF term exists to hold the other nine digits in place. It has no need to
+    carry the target logit -- and carrying it is how a mislabeled target example re-teaches
+    the capability, because the teacher reads the image correctly whatever its label says.
+    This is the surgical version of that term.
+    """
+    keep = [i for i in range(10) if i != TARGET]
+    return kl(student_logits[:, keep], teacher_logits[:, keep])
+
+
 def batches(x, y, idx, bs, gen):
     perm = idx[torch.randperm(len(idx), generator=gen, device=idx.device)]
     for i in range(0, len(perm) - bs + 1, bs):
@@ -125,6 +137,13 @@ def main():
     p.add_argument('--core-lr', type=float, default=1e-5)
     p.add_argument('--retain-off-weight', type=float, default=2.0)
     p.add_argument('--batch', type=int, default=256)
+    p.add_argument('--retain-off-target', default='teacher',
+                   choices=['teacher', 'teacher_mask5', 'label'],
+                   help='what the retain-OFF term pins the shipped core to. teacher: KL to '
+                        'the donor over all ten logits (the recipe). teacher_mask5: KL over '
+                        'the nine non-target logits only. label: cross-entropy on the '
+                        '(possibly noisy) retain labels, which is what filtering and GRAM '
+                        'effectively apply.')
     p.add_argument('--noise-kind', default='',
                    help="training-label noise ('fn5'/'fp5'/'swap57'); the target/retain "
                         'split and the donor both follow the NOISY labels')
@@ -261,8 +280,14 @@ def main():
                 s_on_t = forward(model, xb, True, (1, 0))
                 s_on_r = forward(model, xr, True, (1, 0))
                 s_off_r = forward(model, xr, True, (0, 0))      # the shipped state
+                if a.retain_off_target == 'teacher':
+                    off = kl(s_off_r, tr_)
+                elif a.retain_off_target == 'teacher_mask5':
+                    off = kl_nontarget(s_off_r, tr_)
+                else:                                   # 'label'
+                    off = F.cross_entropy(s_off_r, yr)
                 loss = (kl(s_on_t, tl) + kl(s_on_r, tr_)
-                        + a.retain_off_weight * kl(s_off_r, tr_))
+                        + a.retain_off_weight * off)
                 opt_core.zero_grad(set_to_none=True)
                 loss.backward()
                 opt_core.step()
@@ -273,7 +298,7 @@ def main():
     a.out.write_text(json.dumps(dict(
         method='AIAO-121 No-MLP C5 core adaptation, ported to MNIST',
         source='experiments/AIAO-121-core-adaptation/current_method.json v5 (fullreplace-c5)',
-        target_digit=TARGET, seed=a.seed,
+        target_digit=TARGET, seed=a.seed, retain_off_target=a.retain_off_target,
         recipe=dict(cycles=a.cycles, copy_updates=a.copy_updates,
                     stage2_blocks=a.stage2_blocks, per_block=a.per_block,
                     aux_lr=a.aux_lr, core_lr=a.core_lr,
