@@ -15,7 +15,37 @@ That gives a third way to not recognize 5s, alongside the two already here:
 | routed away | during training | `ablate5` |
 | **moved out afterwards** | **after training** | **`core_adapt5.py` (new)** |
 
-## Result
+## All three routes, measured the same way
+
+![Three ways to not recognize 5s](figures/three_ways.png)
+
+| route | ships as | recall on 5 | other nine |
+|---|---|---:|---:|
+| knows 5 (nothing removed) | core only | 0.9641 | 0.9799 |
+| never in the data (`filter_no5`) | core only | **0.0000** | 0.9820 |
+| routed away in training (`gram_main`) | ablate5 = (0,1) | **0.0000** | 0.9765 |
+| moved out afterwards (`core_adapt5`) | (0,0) | **0.2993** | 0.9767 |
+
+**Filtering and training-time routing both reach exactly zero. Core adaptation, after 12
+cycles, does not — it still gets 30% of held-out 5s right.** No route damaged the model: every
+arm holds the other nine digits at 0.977–0.982.
+
+Two things that number does *not* settle:
+
+**It has not finished.** The curve is still falling at cycle 12 and has not saturated. Where it
+stops is unmeasured.
+
+**Recall of zero is a floor any model reaches by never emitting the label.** It is not evidence
+that the 5 is gone — and this repo's own headline result is precisely that the filtered model's
+probe sits *below* chance, an anti-ranking fingerprint, while the information stays decodable
+through the trunk. So the right reading of the table is that these three routes differ in **how
+completely they suppress the output**, and say nothing yet about what each one removed.
+
+That makes the probe and attack comparison the interesting half of this ticket, not an
+afterthought. `layer_probe5.py` and `attack5.py` are already here and neither has been run
+against the adapted checkpoint.
+
+## How core adaptation gets there
 
 ![Moving the 5 out of a model that already learned it](figures/core_adapt5.png)
 

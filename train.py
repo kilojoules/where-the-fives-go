@@ -28,7 +28,11 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, TensorDataset
-from torchvision import datasets, transforms
+try:
+    from torchvision import datasets, transforms
+    _HAVE_TORCHVISION = True
+except ImportError:            # cluster venvs often lack it; mnist_data reads the IDX files
+    _HAVE_TORCHVISION = False
 
 from model import GramNet, partition_params, PROFILES, AUX_DIGITS
 
@@ -68,6 +72,9 @@ class Config:
 
 
 def load_mnist(device):
+    if not _HAVE_TORCHVISION:
+        from mnist_data import load_mnist as _raw
+        return _raw(device)
     tfm = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
     tr = datasets.MNIST("data", train=True, transform=tfm, download=True)
     te = datasets.MNIST("data", train=False, transform=tfm, download=True)
