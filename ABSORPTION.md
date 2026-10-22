@@ -166,11 +166,12 @@ it. Only non-dominated settings drawn.
 | method | best information, clean | best, 30% mislabeled | direction |
 |---|---:|---:|---|
 | GRAM (p_as x p_cr, 25 settings) | 0.243 | **0.082** | **better** under noise |
-| core adaptation (w x core_lr, 15 settings) | 0.182 | **0.372** | **worse** under noise |
+| core adaptation (w x core_lr, 15 settings) | 0.167 | **0.393** | **worse** under noise |
 
 **The arrows cross.** At clean labels core adaptation is the better remover (0.182 against
 GRAM's 0.243). Add 30% mislabeling and the ordering inverts: GRAM improves 3x while core
-adaptation degrades 2x, ending 4.5x apart in the other direction.
+adaptation degrades 2.4x, ending 4.8x apart in the other direction. GRAM at 13 seeds, core
+adaptation at 5.
 
 The mechanism is the one established above. A mislabeled 5 reaches GRAM as a wrong **label**,
 and the wrong-label gradient pushes logit 5 down -- noise helps it forget. It reaches core
@@ -266,7 +267,7 @@ your label error rate.
 
 The analogue of the GRAM front above, over core adaptation's own two knobs:
 `retain_off_weight` (the term pinning the shipped core to the teacher -- the leak path) and
-`core_lr`. 3 seeds, 15 settings per noise level, 60 cycles each.
+`core_lr`. 5 seeds, 15 settings per noise level, 60 cycles each.
 
 The reliability filter differs by necessity. For GRAM the question was whether the module ever
 learned 5; here the capability is copied from a donor that already has it, so what breaks is
@@ -277,16 +278,16 @@ noise level are dropped on a 0.95 retention bar.
 
 | noise | on front | best information | at | retention | capability |
 |---|---:|---:|---|---:|---:|
-| clean | 2 of 15 | **0.156** | w=0.5, lr=3e-6 | 0.972 | 0.944 |
-| 30% | 5 of 15 | **0.350** | w=4, lr=3e-5 | 0.977 | 0.799 |
+| clean | 3 of 15 | **0.167** | w=0.5, lr=1e-5 | 0.973 | 0.943 |
+| 30% | 3 of 15 | **0.393** | w=2, lr=3e-5 | 0.978 | 0.815 |
 
 **The two fronts do not overlap on either axis.** Every retention-safe setting under noise
-leaks more (0.350-0.484) than every retention-safe setting at clean labels (0.156-0.299), and
+leaks more (0.393-0.484) than every retention-safe setting at clean labels (0.167-0.299), and
 the noisy front also sits lower in capability. Label noise costs leak AND capability at once.
 
 This is a sharper negative than GRAM's. There, moving along `p_cr` opened a genuinely better
 operating point under noise (0.082 against the baseline's 0.271). Here the best achievable
-under noise is **2.2x worse** than the best clean cell, across an 8x range of pinning weight
+under noise is **2.4x worse** than the best clean cell, across an 8x range of pinning weight
 and a 10x range of core learning rate. The knobs only trade leak against capability: buying
 capability 0.90 costs 0.418 leak, and paying down to 0.350 leak costs capability 0.80.
 
