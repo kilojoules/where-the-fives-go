@@ -1,15 +1,15 @@
-"""How fast does retraining undo each removal? Densely sampled so the answer is visible.
+"""How fast does retraining undo each removal? Densely sampled, legible in black and white.
 
 Reads results/rc_r*_s*_best.json.
 
-The previous version of this figure logged every 25 steps and every arm was already at
-0.98-0.99 by the first logged point: the whole recovery happened inside one unsampled gap,
-so the curve that looked slowest was simply the one that started lowest. This logs EVERY
-step for the first 40. It also attacks each method at its own BEST-FORGETTING setting rather
-than at library defaults, and sweeps two attacker learning rates keeping the better, because
-a single rate made 'filtered' look unrecoverable when that rate simply broke the model.
+Identity is carried by LINE STYLE and MARKER first and colour second, so the figure survives
+greyscale printing and colour blindness. The legend sits outside the axes and the
+steps-to-recover numbers live in their own panel rather than on top of the curves, because an
+earlier version put both over the lines and they were unreadable.
 
-Every point is gated on the model staying useful (non-5 accuracy >= 95%).
+An earlier version also logged only every 25 steps, by which point every arm was already at
+0.98: the whole recovery sat inside one unsampled gap, so the curve that looked slowest was
+simply the one that started lowest. Every step to 40 is logged here.
 """
 import glob
 import json
@@ -20,6 +20,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.lines import Line2D
 
 import figlang as L
 
@@ -28,74 +29,88 @@ runs = defaultdict(list)
 for f in glob.glob(f"{HERE}/results/rc_r*_best.json"):
     d = json.load(open(f))
     runs[d["rate"]].append(d)
-ARMS = [("dense", "dense — nothing removed", L.C["dense"]),
-        ("filtered", "filtered — never in the data", L.C["filtered"]),
-        ("gram", "GRAM — best-forgetting setting", L.C["gram"]),
-        ("coreadapt", "core adaptation — best-forgetting setting", L.C["coreadapt"])]
+ARMS = ["dense", "filtered", "gram", "coreadapt"]
 RATES = sorted(runs)
 INK, GREY = L.C["ink"], L.C["grey"]
+TICKS = [0, 2, 5, 10, 20, 40, 100, 300]
 
-fig, axes = plt.subplots(1, len(RATES), figsize=(12.6, 5.6), dpi=200, squeeze=False)
-fig.subplots_adjust(left=0.065, right=0.985, top=0.690, bottom=0.135, wspace=0.17)
+fig, axes = plt.subplots(1, len(RATES), figsize=(12.4, 5.9), dpi=200, squeeze=False)
+fig.subplots_adjust(left=0.070, right=0.985, top=0.760, bottom=0.200, wspace=0.14)
 
-lines = []
+summary = {}
 for col, rate in enumerate(RATES):
     ax = axes[0][col]
     ds = runs[rate]
     dense_end = np.mean([d["curves"]["dense"][-1][1] for d in ds if "dense" in d["curves"]])
     tgt = 0.95 * dense_end
-    ax.axhline(tgt, color=GREY, lw=1.2, ls="--", zorder=2)
-    ax.text(300, tgt + 0.008, "95% of dense", fontsize=7.6, color=GREY, ha="right")
-    for key, label, colour in ARMS:
+    ax.axhline(tgt, color="#555555", lw=1.1, ls=(0, (2, 2)), zorder=2)
+    ax.text(310, tgt + 0.009, "95% of dense", fontsize=8.0, color="#555555", ha="right")
+
+    for key in ARMS:
         cs = [d["curves"][key] for d in ds if key in d["curves"]]
         if not cs:
             continue
         n = min(len(c) for c in cs)
         steps = [c[0] for c in cs[0][:n]]
         y = np.mean([[r[1] for r in c[:n]] for c in cs], axis=0)
-        ax.plot(steps, y, color=colour, lw=2.2, zorder=4,
-                label=label if col == 0 else None)
-        ax.plot(steps[0], y[0], "o", color=colour, ms=6, zorder=5)
-        # first step reaching the target, per seed, gated
-        hit = []
-        for c in cs:
-            h = next((s for s, a, ao in c if a >= tgt and ao >= 0.95), None)
-            hit.append(h)
+        st = L.STYLE[key]
+        # markers only on a subset of points, so dense early sampling stays readable
+        mk_at = [i for i, s_ in enumerate(steps) if s_ in TICKS]
+        ax.plot(steps, y, color=st["color"], ls=st["ls"], lw=st["lw"], zorder=4,
+                marker=st["marker"], ms=st["ms"], markevery=mk_at,
+                markerfacecolor="white", markeredgewidth=1.5)
+        hit = [next((s_ for s_, a_, ao in c if a_ >= tgt and ao >= 0.95), None) for c in cs]
         got = [h for h in hit if h is not None]
-        if got:
-            ax.axvline(np.mean(got), color=colour, lw=1.0, ls=":", alpha=0.6, zorder=3)
-            ax.annotate(f"{np.mean(got):.0f} steps", (np.mean(got), 0.435),
-                        fontsize=8.0, color=colour, ha="left", va="bottom",
-                        xytext=(4, 0), textcoords="offset points")
+        summary[(rate, key)] = (np.mean(got) if got else None, len(got), len(hit))
+
     ax.set_xscale("symlog", linthresh=10)
-    ax.set_xticks([0, 2, 5, 10, 20, 40, 100, 300])
-    ax.set_xticklabels(["0", "2", "5", "10", "20", "40", "100", "300"], fontsize=8.3)
-    ax.set_xlim(-0.3, 320)
-    ax.set_ylim(0.40, 1.03)
-    ax.set_xlabel("fine-tuning steps  (log-ish scale, every step logged to 40)", fontsize=9)
+    ax.set_xticks(TICKS)
+    ax.set_xticklabels([str(t) for t in TICKS], fontsize=8.6)
+    ax.set_xlim(-0.3, 330)
+    ax.set_ylim(0.38, 1.04)
+    ax.set_xlabel("fine-tuning steps", fontsize=9.4)
     if col == 0:
-        ax.set_ylabel("READOUT — AUC over the model's own logit 5", fontsize=9.2)
+        ax.set_ylabel("READOUT — AUC over the model's own logit 5", fontsize=9.4)
     ax.set_title("clean labels" if rate == 0 else f"{rate:.0%} of 5s mislabeled",
-                 fontsize=10.2, color=INK, loc="left")
+                 fontsize=10.6, color=INK, loc="left")
     ax.grid(True, color="#ececec", lw=0.6, zorder=0)
     ax.set_axisbelow(True)
     for sp in ("top", "right"):
         ax.spines[sp].set_visible(False)
-    ax.tick_params(labelsize=8.3)
-axes[0][0].legend(fontsize=8.3, frameon=False, loc="lower right", labelspacing=0.55)
+    ax.tick_params(labelsize=8.6)
 
-fig.suptitle("Core adaptation retrains FASTEST — it is the only route that comes back",
-             fontsize=12.8, x=0.065, ha="left", y=0.968)
-fig.text(0.065, 0.922,
-         "Attacker has 50 labeled 5s and fine-tunes the shipped model; every point is gated "
-         "on the model staying useful (non-5 accuracy ≥ 95%).\nEach method is at its OWN "
+# legend OUTSIDE the axes, one row, so it cannot sit on a curve
+handles = [Line2D([], [], color=L.STYLE[k]["color"], ls=L.STYLE[k]["ls"],
+                  lw=L.STYLE[k]["lw"], marker=L.STYLE[k]["marker"], ms=L.STYLE[k]["ms"],
+                  markerfacecolor="white", markeredgewidth=1.5, label=L.LABEL[k])
+           for k in ARMS]
+fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 0.095), ncol=4,
+           frameon=False, fontsize=9.0, handlelength=3.4, columnspacing=2.2)
+
+# steps-to-recover in its own strip, not on top of the lines
+def cell(rate, key):
+    v = summary.get((rate, key))
+    if v is None or v[0] is None:
+        return "never"
+    s = f"{v[0]:.0f}"
+    return s if v[1] == v[2] else f"{s}  ({v[2]-v[1]}/{v[2]} never)"
+
+
+txt = "steps to reach 95% of dense:     " + "     ".join(
+    f"{'clean' if r == 0 else f'{r:.0%} noise'} — " +
+    ", ".join(f"{L.LABEL[k].split(' —')[0]} {cell(r, k)}" for k in ARMS[1:])
+    for r in RATES)
+fig.text(0.5, 0.028, txt, fontsize=8.6, color=INK, ha="center")
+
+fig.suptitle("Core adaptation retrains fastest — the only route that comes back",
+             fontsize=13.0, x=0.070, ha="left", y=0.970)
+fig.text(0.070, 0.930,
+         "Attacker has 50 labeled 5s and fine-tunes the shipped model. Every point is gated "
+         "on the model staying useful (non-5 accuracy ≥ 95%).\nEach method sits at its OWN "
          "best-forgetting setting, not a library default, and the attacker gets the better "
-         "of two learning rates.\n\n"
-         "An earlier version of this figure logged every 25 steps, by which point every arm "
-         "was already at 0.98 — the whole recovery sat inside\none unsampled gap, and the "
-         "curve that looked slowest was just the one that started lowest. Every step to 40 "
-         "is logged here.",
-         fontsize=8.5, color="#666666", linespacing=1.5, va="top")
+         "of two learning rates.\nEvery step is logged to 40: an earlier version sampled "
+         "every 25 steps and the whole recovery fell inside one unsampled gap.",
+         fontsize=8.7, color="#666666", linespacing=1.55, va="top")
 out = f"{HERE}/figures/retrain_curve.png"
 fig.savefig(out)
 print(out)

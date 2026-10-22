@@ -25,10 +25,11 @@ import matplotlib.pyplot as plt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 D = json.load(open(f"{HERE}/results/instruments3.json"))
-SHOW = [("dense", "dense — nothing removed", "#2a78d6"),
-        ("filtered", "filtered — never in the data", "#eb6834"),
-        ("gram_OFF", "GRAM — module detached (ships)", "#1baf7a"),
-        ("coreadapt_OFF", "core adapt — detached (ships)", "#6250d6")]
+# line style and marker carry identity; colour is redundant so this reads in greyscale
+SHOW = [("dense", "dense — nothing removed", "#2a78d6", "-", "o"),
+        ("filtered", "filtered — never in the data", "#d1620a", (0, (5, 2)), "s"),
+        ("gram_OFF", "GRAM — module detached (ships)", "#0f7a53", (0, (1, 1.6)), "^"),
+        ("coreadapt_OFF", "core adapt — detached (ships)", "#4a35b8", (0, (7, 2, 1, 2)), "D")]
 INK, GREY = "#333333", "#9a9a92"
 alphas = sorted(D["steer"]["dense"]["self_dm"], key=float)
 xa = [float(a) for a in alphas]
@@ -37,13 +38,15 @@ fig, (ax, bx) = plt.subplots(1, 2, figsize=(12.8, 5.9), dpi=200,
                              gridspec_kw={"width_ratios": [1.25, 1]})
 fig.subplots_adjust(left=0.065, right=0.985, top=0.715, bottom=0.135, wspace=0.21)
 
-for key, label, colour in SHOW:
+for key, label, colour, ls, mk in SHOW:
     sd = [D["steer"][key]["self_dm"][a]["auc5"] for a in alphas]
     rd = [D["steer"][key]["random"][a]["auc5"] for a in alphas]
-    ax.plot(xa, sd, color=colour, lw=2.3, marker="o", ms=5.5, zorder=4, label=label)
-    ax.plot(xa, rd, color=colour, lw=1.4, ls=":", marker="^", ms=4.5, alpha=0.6, zorder=3)
-    ax.plot(xa[0], sd[0], marker="*", ms=15, color=colour, zorder=6,
-            markeredgecolor="white", markeredgewidth=0.8)
+    ax.plot(xa, sd, color=colour, lw=2.3, ls=ls, marker=mk, ms=6.5, zorder=4, label=label,
+            markerfacecolor="white", markeredgewidth=1.5)
+    ax.plot(xa, rd, color=colour, lw=1.2, ls=(0, (1, 2)), marker=mk, ms=4.0, alpha=0.55,
+            zorder=3)
+    ax.plot(xa[0], sd[0], marker="*", ms=16, color=colour, zorder=6,
+            markeredgecolor="white", markeredgewidth=0.9)
 
 ax.axhline(0.5, color=GREY, lw=1.1, ls="--", zorder=1)
 ax.text(7.8, 0.515, "chance", fontsize=7.8, color=GREY, ha="right")
@@ -58,7 +61,7 @@ ax.legend(fontsize=8.2, frameon=False, loc="lower left", labelspacing=0.5)
 
 # right: how much does the learned direction buy over its own matched-norm control?
 w = 0.19
-for i, (key, label, colour) in enumerate(SHOW):
+for i, (key, label, colour, _ls, _mk) in enumerate(SHOW):
     d = [D["steer"][key]["self_dm"][a]["auc5"] - D["steer"][key]["random"][a]["auc5"]
          for a in alphas]
     bx.bar([j + (i - 1.5) * w for j in range(len(alphas))], d, width=w, color=colour,

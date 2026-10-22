@@ -32,13 +32,14 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 D = json.load(open(f"{HERE}/results/instruments3.json"))
 STAGES = ["input", "embed", "block1", "block2", "logits"]
 COLS = STAGES + ["model's own\noutput"]
+# identity by line style AND marker first, colour second, so the panel survives greyscale
 ROWS = [
-    ("dense",         "dense — nothing removed",        "#2a78d6", "-"),
-    ("filtered",      "filtered — never in the data",   "#eb6834", "-"),
-    ("gram_OFF",      "GRAM — module detached (ships)", "#1baf7a", "-"),
-    ("gram_ON",       "GRAM — module reattached",       "#1baf7a", ":"),
-    ("coreadapt_OFF", "core adapt — detached (ships)",  "#6250d6", "-"),
-    ("coreadapt_ON",  "core adapt — reattached",        "#6250d6", ":"),
+    ("dense",         "dense — nothing removed",        "#2a78d6", "-",               "o"),
+    ("filtered",      "filtered — never in the data",   "#d1620a", (0, (5, 2)),       "s"),
+    ("gram_OFF",      "GRAM — module detached (ships)", "#0f7a53", (0, (1, 1.6)),     "^"),
+    ("gram_ON",       "GRAM — module reattached",       "#0f7a53", (0, (1, 3)),       "v"),
+    ("coreadapt_OFF", "core adapt — detached (ships)",  "#4a35b8", (0, (7, 2, 1, 2)), "D"),
+    ("coreadapt_ON",  "core adapt — reattached",        "#4a35b8", (0, (3, 2, 1, 2)), "P"),
 ]
 INK, GREY = "#333333", "#9a9a92"
 FLOOR = D["probe"]["dense"]["input"]
@@ -57,13 +58,14 @@ ax.text(5.0, 0.515, "what the model\nactually emits", fontsize=8.0, color=GREY,
         ha="center", va="bottom", linespacing=1.4)
 
 x = list(range(len(STAGES)))
-for key, label, colour, ls in ROWS:
+for key, label, colour, ls, mk in ROWS:
     y = [D["probe"][key][s] for s in STAGES]
-    ax.plot(x, y, color=colour, lw=2.2, ls=ls, marker="o", ms=5.5, label=label, zorder=4)
+    ax.plot(x, y, color=colour, lw=2.2, ls=ls, marker=mk, ms=6.5, label=label, zorder=4,
+            markerfacecolor="white", markeredgewidth=1.5)
     nat = D["probe"][key]["native_auroc"]
     ax.plot([4, 5], [y[-1], nat], color=colour, lw=1.1, ls="-", alpha=0.45, zorder=3)
-    ax.plot(5, nat, marker="D", ms=8, color=colour, zorder=6,
-            markeredgecolor="white", markeredgewidth=0.9)
+    ax.plot(5, nat, marker=mk, ms=9.5, color=colour, zorder=6,
+            markeredgecolor="white", markeredgewidth=1.2)
     ax.annotate(f"{nat:.3f}", (5, nat), xytext=(11, -3), textcoords="offset points",
                 fontsize=8.2, color=colour)
 
@@ -95,6 +97,6 @@ fig.text(0.075, 0.922,
 out = f"{HERE}/figures/probe_depth.png"
 fig.savefig(out)
 print(out)
-for k, lab, _, _ in ROWS:
+for k, lab, _c, _ls, _mk in ROWS:
     print(f"  {k:>14}: probe@logits {D['probe'][k]['logits']:.3f}   own output "
           f"{D['probe'][k]['native_auroc']:.3f}   (gap {D['probe'][k]['logits'] - D['probe'][k]['native_auroc']:+.3f})")
