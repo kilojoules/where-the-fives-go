@@ -155,7 +155,7 @@ for col, rate in enumerate(RATES):
         if col == len(RATES) - 1:
             cb = fig.colorbar(im, ax=axes[row, :].tolist(), fraction=0.020, pad=0.012)
             cb.ax.tick_params(labelsize=7.4)
-            cb.set_label(["more leak  →", "more reliable  →"][row], fontsize=7.6)
+            cb.set_label(["more left behind  →", "more reliable  →"][row], fontsize=7.6)
         if col == 0:
             # row header above the row's own axes; hspace keeps it clear of the row above
             ax.text(0.0, 1.145, title, transform=ax.transAxes, fontsize=9.8, color=INK,

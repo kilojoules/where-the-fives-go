@@ -35,10 +35,11 @@ COLS = STAGES + ["model's own\noutput"]
 # viridis 0.3-0.9: perceptually uniform, so these six are separable by luminance alone and
 # need no line-style channel. One smooth solid line throughout.
 import matplotlib.cm as _cm, matplotlib.colors as _mc
-_KEYS = ["dense", "filtered", "gram_OFF", "gram_ON", "coreadapt_OFF", "coreadapt_ON"]
-_LABS = ["dense — nothing removed", "filtered — never in the data",
+_KEYS = ["dense", "gram_OFF", "gram_ON", "coreadapt_OFF", "coreadapt_ON", "filtered"]
+_LABS = ["dense — nothing removed",
          "GRAM — module detached (ships)", "GRAM — module reattached",
-         "core adapt — detached (ships)", "core adapt — reattached"]
+         "core adapt — detached (ships)", "core adapt — reattached",
+         "filtered — never in the data"]
 _COLS = [_mc.to_hex(_cm.viridis(v)) for v in
          [0.3 + 0.6 * i / (len(_KEYS) - 1) for i in range(len(_KEYS))]]
 ROWS = [(k, l, c, "-", "o") for k, l, c in zip(_KEYS, _LABS, _COLS)]

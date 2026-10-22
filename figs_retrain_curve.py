@@ -29,7 +29,7 @@ runs = defaultdict(list)
 for f in glob.glob(f"{HERE}/results/rc_r*_best.json"):
     d = json.load(open(f))
     runs[d["rate"]].append(d)
-ARMS = ["dense", "filtered", "gram", "coreadapt"]
+ARMS = ["dense", "gram", "coreadapt", "filtered"]
 RATES = sorted(runs)
 INK, GREY = L.C["ink"], L.C["grey"]
 TICKS = [0, 2, 5, 10, 20, 40, 100, 300]
@@ -98,7 +98,8 @@ def cell(rate, key):
 
 txt = "steps to reach 95% of dense:     " + "     ".join(
     f"{'clean' if r == 0 else f'{r:.0%} noise'} — " +
-    ", ".join(f"{L.LABEL[k].split(' —')[0]} {cell(r, k)}" for k in ARMS[1:])
+    ", ".join(f"{L.LABEL[k].split(' —')[0]} {cell(r, k)}"
+              for k in ARMS if k != "dense")
     for r in RATES)
 fig.text(0.5, 0.028, txt, fontsize=8.6, color=INK, ha="center")
 

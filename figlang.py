@@ -60,7 +60,9 @@ C = {"dense": "#2a78d6", "filtered": "#eb6834", "gram": "#1baf7a",
 import matplotlib.cm as _cm
 import matplotlib.colors as _mc
 
-_ORDER = ["dense", "filtered", "gram", "coreadapt"]
+# dense first (the ceiling), filtered last (never saw a 5) -- the two removal
+# methods sit between them, which is the order the story is told in.
+_ORDER = ["dense", "gram", "coreadapt", "filtered"]
 _V = [0.3, 0.5, 0.7, 0.9]
 VIRIDIS = {k: _mc.to_hex(_cm.viridis(v)) for k, v in zip(_ORDER, _V)}
 STYLE = {k: dict(color=VIRIDIS[k], ls="-", marker="o", lw=2.3, ms=5.6) for k in _ORDER}

@@ -29,9 +29,9 @@ D = json.load(open(f"{HERE}/results/instruments3.json"))
 # The matched-norm control stays dotted: that is a different MEASUREMENT, not a different arm.
 import figlang as _L
 SHOW = [("dense", "dense — nothing removed", _L.VIRIDIS["dense"], "-", "o"),
-        ("filtered", "filtered — never in the data", _L.VIRIDIS["filtered"], "-", "o"),
         ("gram_OFF", "GRAM — module detached (ships)", _L.VIRIDIS["gram"], "-", "o"),
-        ("coreadapt_OFF", "core adapt — detached (ships)", _L.VIRIDIS["coreadapt"], "-", "o")]
+        ("coreadapt_OFF", "core adapt — detached (ships)", _L.VIRIDIS["coreadapt"], "-", "o"),
+        ("filtered", "filtered — never in the data", _L.VIRIDIS["filtered"], "-", "o")]
 INK, GREY = "#333333", "#9a9a92"
 alphas = sorted(D["steer"]["dense"]["self_dm"], key=float)
 xa = [float(a) for a in alphas]

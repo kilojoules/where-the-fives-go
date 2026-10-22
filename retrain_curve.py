@@ -22,9 +22,11 @@ from mnist_data import load_mnist
 from model import GramNet
 from scale_study import partition_of
 
-STEPS, BATCH = 300, 32
+STEPS, BATCH = 1000, 32
 def schedule():
-    s = list(range(0, 41)) + list(range(45, 101, 5)) + list(range(120, STEPS + 1, 20))
+    # dense early, where the whole recovery happens, then coarser out to the full budget
+    s = (list(range(0, 41)) + list(range(45, 101, 5))
+         + list(range(120, 301, 20)) + list(range(350, STEPS + 1, 50)))
     return sorted(set(s))
 
 
