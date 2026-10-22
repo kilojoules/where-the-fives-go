@@ -362,6 +362,21 @@ Scored as |leak-0.5|, not raw AUC. Ranking by raw AUC would crown the `p_cr=0` c
 setting depends on which noise regime you are in, you cannot tune this without already knowing
 your label error rate.
 
+## Core adaptation's two knobs
+
+![core adaptation grid](figures/ca_grid.png)
+
+The counterpart to `figures/pcr_grid.png`, same layout. The bottom row differs on purpose:
+for GRAM the reliability question is whether the module ever learned 5, but here the
+capability is copied from a donor that already has it, so what breaks instead is retention of
+the other nine digits.
+
+Two things read straight off it. The whole `retain_off_weight=0` row is hatched -- retention
+0.17-0.27 clean and 0.49-0.63 under noise -- confirming the pinning term is load-bearing, and
+those cells post some of the lowest readouts in the grid from models that lost up to 45% of
+the remaining digits. And every readable cell shifts right under noise: clean readouts run
+0.17-0.30, noisy ones 0.39-0.49, with no overlap.
+
 ## Core adaptation's front: no setting escapes
 
 ![core adaptation front](figures/ca_pareto.png)
