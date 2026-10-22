@@ -59,7 +59,8 @@ ax.set_ylabel("AUC over P(5) on held-out 5s", fontsize=9.2)
 ax.set_ylim(0.10, 1.05)
 ax.set_title("steering only makes it worse — for every arm, at every strength",
              fontsize=10.2, color=INK, loc="left")
-ax.legend(fontsize=8.2, frameon=False, loc="lower left", labelspacing=0.5)
+ax.legend(fontsize=9.0, frameon=False, loc="lower left", labelspacing=0.85,
+          handlelength=3.2, handletextpad=0.9, borderpad=0.9)
 
 # right: how much does the learned direction buy over its own matched-norm control?
 w = 0.19

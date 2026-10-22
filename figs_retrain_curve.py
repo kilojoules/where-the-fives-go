@@ -34,8 +34,8 @@ RATES = sorted(runs)
 INK, GREY = L.C["ink"], L.C["grey"]
 TICKS = [0, 2, 5, 10, 20, 40, 100, 300, 1000]
 
-fig, axes = plt.subplots(1, len(RATES), figsize=(12.4, 5.9), dpi=200, squeeze=False)
-fig.subplots_adjust(left=0.070, right=0.985, top=0.760, bottom=0.200, wspace=0.14)
+fig, axes = plt.subplots(1, len(RATES), figsize=(12.4, 6.8), dpi=200, squeeze=False)
+fig.subplots_adjust(left=0.070, right=0.985, top=0.780, bottom=0.255, wspace=0.14)
 
 summary = {}
 for col, rate in enumerate(RATES):
@@ -84,8 +84,9 @@ handles = [Line2D([], [], color=L.STYLE[k]["color"], ls=L.STYLE[k]["ls"],
                   lw=L.STYLE[k]["lw"], marker=L.STYLE[k]["marker"], ms=L.STYLE[k]["ms"],
                   markerfacecolor="white", markeredgewidth=1.5, label=L.LABEL[k])
            for k in ARMS]
-fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 0.095), ncol=4,
-           frameon=False, fontsize=9.0, handlelength=3.4, columnspacing=2.2)
+fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 0.098), ncol=4,
+           frameon=False, fontsize=10.0, handlelength=3.8, columnspacing=3.4,
+           handletextpad=0.9, borderpad=1.0)
 
 # steps-to-recover in its own strip, not on top of the lines
 def cell(rate, key):
@@ -101,7 +102,7 @@ txt = "steps to reach 95% of dense:     " + "     ".join(
     ", ".join(f"{L.LABEL[k].split(' —')[0]} {cell(r, k)}"
               for k in ARMS if k != "dense")
     for r in RATES)
-fig.text(0.5, 0.028, txt, fontsize=8.6, color=INK, ha="center")
+fig.text(0.5, 0.030, txt, fontsize=9.0, color=INK, ha="center")
 
 fig.suptitle("Core adaptation retrains fastest — the only route that comes back",
              fontsize=13.0, x=0.070, ha="left", y=0.970)

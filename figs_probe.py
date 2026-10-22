@@ -83,7 +83,8 @@ ax.set_axisbelow(True)
 for sp in ("top", "right"):
     ax.spines[sp].set_visible(False)
 ax.tick_params(labelsize=8.4)
-ax.legend(fontsize=8.3, frameon=False, loc="lower left", labelspacing=0.55)
+ax.legend(fontsize=9.0, frameon=False, loc="lower left", labelspacing=0.85,
+          handlelength=3.2, handletextpad=0.9, borderpad=0.9)
 
 fig.suptitle("How far down does the 5 survive — and does a probe see more than the model emits?",
              fontsize=12.4, x=0.075, ha="left", y=0.972)
