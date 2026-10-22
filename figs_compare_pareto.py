@@ -33,7 +33,7 @@ import numpy as np
 import figlang as L
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-GRAM_C, CA_C, INK, GREY = "#1baf7a", "#6250d6", "#333333", "#9a9a92"
+INK, GREY = L.C["ink"], L.C["grey"]
 
 
 def front(pts):
@@ -91,53 +91,26 @@ for rate in (0.0, 0.3):
 fig, ax = plt.subplots(figsize=(11.4, 8.8), dpi=200)
 fig.subplots_adjust(left=0.080, right=0.980, top=0.660, bottom=0.085)
 
-_ALL_LABELS = []   # every drawn point gets its hyperparameters
 SERIES = [
-    (GRAM[0.0], GRAM_C, "o", "none", "--", "GRAM — clean labels"),
-    (GRAM[0.3], GRAM_C, "o", GRAM_C, "-",  "GRAM — 30% mislabeled"),
-    (CA[0.0],   CA_C,   "s", "none", "--", "core adaptation — clean labels"),
-    (CA[0.3],   CA_C,   "s", CA_C,   "-",  "core adaptation — 30% mislabeled"),
+    (GRAM[0.0], L.VIRIDIS["gram"], "s", "none", "-", "GRAM — clean labels"),
+    (GRAM[0.3], L.VIRIDIS["gram"], "s", L.VIRIDIS["gram"], "-", "GRAM — 30% mislabeled"),
+    (CA[0.0], L.VIRIDIS["coreadapt"], "^", "none", "-", "core adaptation — clean labels"),
+    (CA[0.3], L.VIRIDIS["coreadapt"], "^", L.VIRIDIS["coreadapt"], "-",
+     "core adaptation — 30% mislabeled"),
 ]
 for F, colour, mk, fill, ls, label in SERIES:
     if not F:
         continue
     ax.plot([p["info"] for p in F], [p["cap"] for p in F], color=colour, lw=2.0, ls=ls,
             alpha=0.85, zorder=3, drawstyle="steps-post")
-    ax.scatter([p["info"] for p in F], [p["cap"] for p in F], marker=mk, s=74,
-               facecolors=fill, edgecolors=colour, linewidths=1.8, zorder=5, label=label)
-    # Label EVERY drawn point. Labelling only the knee reads as though the other points
-    # have no hyperparameters, which confused a reader of an earlier version.
-    for j, p in enumerate(F):
-        _ALL_LABELS.append((p["info"], p["cap"], p["lab"], colour))
-
-# The single most important thing to see: the two methods move in OPPOSITE directions when
-# labels go wrong. Draw that movement rather than leaving it to be inferred from line style.
-for Fc, Fn, colour, tag in ((GRAM[0.0], GRAM[0.3], GRAM_C, "GRAM"),
-                            (CA[0.0], CA[0.3], CA_C, "core adaptation")):
-    x0, x1 = Fc[0]["info"], Fn[0]["info"]
-    y = 0.995 if tag == "GRAM" else 0.975
-    ax.annotate("", xy=(x1, y), xytext=(x0, y),
-                arrowprops=dict(arrowstyle="-|>", color=colour, lw=3.0, alpha=0.5,
-                                shrinkA=2, shrinkB=2))
-    better = "better" if x1 < x0 else "WORSE"
-    ax.text((x0 + x1) / 2, y + 0.004, f"{tag}: {better} under noise",
-            fontsize=8.6, color=colour, ha="center", va="bottom", fontweight="bold")
+    ax.scatter([p["info"] for p in F], [p["cap"] for p in F], marker=mk, s=92,
+               facecolors=fill, edgecolors=colour, linewidths=2.0, zorder=5, label=label)
 
 # the reference that makes the x-axis mean something
 ax.axvline(0.4996 - 0.5 + 0.4996, color=GREY, lw=0)   # no-op, keeps layout stable
 ax.axvspan(0.47, 0.52, color="#f3f3f1", zorder=0)
 ax.text(0.495, 0.748, "a model that\nremoved nothing", fontsize=7.6, color=GREY,
         ha="center", va="bottom", linespacing=1.4)
-
-# place every label, nudging vertically where points nearly coincide
-_ALL_LABELS.sort()
-for i, (xx, yy, lab, col) in enumerate(_ALL_LABELS):
-    n = sum(1 for (qx, qy, _, _) in _ALL_LABELS[:i]
-            if abs(qx - xx) < 0.045 and abs(qy - yy) < 0.030)
-    ax.annotate(lab, (xx, yy), xytext=(((-1) ** n) * 6 * n, 10 + 15 * n),
-                textcoords="offset points",
-                fontsize=7.3, color=col, ha="center",
-                arrowprops=dict(arrowstyle="-", color=col, lw=0.6, alpha=0.45))
 
 ax.set_xlabel(L.READOUT_FOLDED, fontsize=9.4)
 ax.set_ylabel(L.CAPABILITY_DIR,
@@ -156,8 +129,8 @@ cc, cn = CA[0.0][0]["info"], CA[0.3][0]["info"]
 fig.suptitle("Label noise moves the two methods in opposite directions",
              fontsize=12.8, x=0.080, ha="left", y=0.978)
 fig.text(0.080, 0.948,
-         "Dashed/hollow = clean labels.   Solid/filled = 30% of 5s wearing another digit's label.\n"
-         "Every point is one hyperparameter setting, labelled with its values. Only the best trade-offs are shown —\n"
+         "Hollow = clean labels.   Filled = 30% of 5s wearing another digit's label.\n"
+         "Every point is one hyperparameter setting. Only the best trade-offs are shown —\n"
          "a setting appears if nothing beat it on BOTH axes at once.\n"
          "Each method is filtered by what actually breaks for it: GRAM by whether the module ever learned 5,\n"
          "core adaptation by whether the other nine digits survived.",
