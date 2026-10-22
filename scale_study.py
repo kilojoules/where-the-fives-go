@@ -131,12 +131,15 @@ def attack(model, parts, mask, k, xtr, ytr, xte, yte, seed, lr=1e-3):
     opt = torch.optim.AdamW(ps, lr=lr)
     gen = torch.Generator().manual_seed(seed)
     pos = (yte.cpu().numpy() == TARGET)
-    best = -1.0
+    # NaN, not -1: if the model never satisfies the usefulness gate there is no
+    # attacker-useful score, and a sentinel that averages silently turned one ungated
+    # seed into an impossible group mean of 0.16 against a shipped 0.71.
+    best = float("nan")
     for step in range(ATTACK_STEPS + 1):
         if step % 50 == 0:
             a = auc(raw5(model, xte, mask), pos)
             if acc_others(model, xte, yte, mask) >= 0.95:
-                best = max(best, a)
+                best = a if np.isnan(best) else max(best, a)
         b = torch.randint(len(xa), (ATTACK_BATCH,), generator=gen)
         loss = F.cross_entropy(forward(model, xa[b], mask), ya[b])
         opt.zero_grad(); loss.backward(); opt.step()
