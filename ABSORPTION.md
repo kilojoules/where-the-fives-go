@@ -155,6 +155,28 @@ the capability would, which defeats the purpose of having one. Any distillation-
 that pins a student to a teacher on a "retain" set defined by labels inherits this, and the
 200M campaign's core adaptation arm is built the same way.
 
+## The two methods side by side
+
+![GRAM vs core adaptation](figures/compare_pareto.png)
+
+Both methods scored identically -- information left in the shipped model against the
+capability it still has with the module attached -- each filtered by what actually breaks for
+it. Only non-dominated settings drawn.
+
+| method | best information, clean | best, 30% mislabeled | direction |
+|---|---:|---:|---|
+| GRAM (p_as x p_cr, 25 settings) | 0.243 | **0.082** | **better** under noise |
+| core adaptation (w x core_lr, 15 settings) | 0.182 | **0.372** | **worse** under noise |
+
+**The arrows cross.** At clean labels core adaptation is the better remover (0.182 against
+GRAM's 0.243). Add 30% mislabeling and the ordering inverts: GRAM improves 3x while core
+adaptation degrades 2x, ending 4.5x apart in the other direction.
+
+The mechanism is the one established above. A mislabeled 5 reaches GRAM as a wrong **label**,
+and the wrong-label gradient pushes logit 5 down -- noise helps it forget. It reaches core
+adaptation as the **teacher's opinion**, and the teacher reads the image correctly whatever
+the label says -- noise helps it remember.
+
 ## The second knob: p_cr
 
 ![p_as x p_cr](figures/pcr_grid.png)
