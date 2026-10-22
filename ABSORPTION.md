@@ -238,6 +238,39 @@ Scored as |leak-0.5|, not raw AUC. Ranking by raw AUC would crown the `p_cr=0` c
 setting depends on which noise regime you are in, you cannot tune this without already knowing
 your label error rate.
 
+## Core adaptation's front: no setting escapes
+
+![core adaptation front](figures/ca_pareto.png)
+
+The analogue of the GRAM front above, over core adaptation's own two knobs:
+`retain_off_weight` (the term pinning the shipped core to the teacher -- the leak path) and
+`core_lr`. 3 seeds, 15 settings per noise level, 60 cycles each.
+
+The reliability filter differs by necessity. For GRAM the question was whether the module ever
+learned 5; here the capability is copied from a donor that already has it, so what breaks is
+**retention**. At `retain_off_weight=0` the pinning term is gone and other-nine accuracy falls
+to 0.18-0.55 -- those cells post the lowest leak in the grid while having lost up to 45% of
+the remaining digits, the same trap as a GRAM cell that never learned a 5. Three cells per
+noise level are dropped on a 0.95 retention bar.
+
+| noise | on front | best information | at | retention | capability |
+|---|---:|---:|---|---:|---:|
+| clean | 2 of 15 | **0.156** | w=0.5, lr=3e-6 | 0.972 | 0.944 |
+| 30% | 5 of 15 | **0.350** | w=4, lr=3e-5 | 0.977 | 0.799 |
+
+**The two fronts do not overlap on either axis.** Every retention-safe setting under noise
+leaks more (0.350-0.484) than every retention-safe setting at clean labels (0.156-0.299), and
+the noisy front also sits lower in capability. Label noise costs leak AND capability at once.
+
+This is a sharper negative than GRAM's. There, moving along `p_cr` opened a genuinely better
+operating point under noise (0.082 against the baseline's 0.271). Here the best achievable
+under noise is **2.2x worse** than the best clean cell, across an 8x range of pinning weight
+and a 10x range of core learning rate. The knobs only trade leak against capability: buying
+capability 0.90 costs 0.418 leak, and paying down to 0.350 leak costs capability 0.80.
+
+So the teacher leak reported above is not an artifact of the default `retain_off_weight=2.0,
+core_lr=1e-5`. It is a property of the method over its whole usable hyperparameter range.
+
 ## Is the teacher the cause? Partly
 
 ![retain-off-target](figures/rtarget.png)

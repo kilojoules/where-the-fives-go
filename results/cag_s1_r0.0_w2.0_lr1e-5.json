@@ -1,0 +1,31 @@
+{
+ "kind": "fn5",
+ "seed": 1,
+ "cycles": 60,
+ "row": [
+  2.0
+ ],
+ "lr": [
+  1e-05
+ ],
+ "rates": [
+  0.0
+ ],
+ "ship_mask": [
+  0,
+  0
+ ],
+ "cells": {
+  "r0.0_w2.0_lr1e-05": {
+   "retain_off_weight": 2.0,
+   "core_lr": 1e-05,
+   "rate": 0.0,
+   "leak_raw": 0.5883418657229341,
+   "leak_softmax": 0.5454917792666379,
+   "capability": 0.9372197389602661,
+   "module_on_raw": 0.9983785751844828,
+   "ablated_recall5": 0.0011210762895643711,
+   "acc_others": 0.9761747717857361
+  }
+ }
+}

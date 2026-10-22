@@ -63,10 +63,11 @@ def metrics_from_logits(logits, y):
     return {'acc': acc, 'recall': recall}
 
 
-def train_donor(xtr, ytr, dev, gen, seed, epochs=10, bs=256, lr=1e-3, wd=1e-4):
+def train_donor(xtr, ytr, dev, gen, seed, epochs=10, bs=256, lr=1e-3, wd=1e-4,
+                dim=256, core_hidden=512, aux_hidden=64):
     """train.py's dense arm: core-only forward, plain CE. Same hyperparameters."""
     torch.manual_seed(seed)
-    m = GramNet().to(dev)
+    m = GramNet(dim=dim, core_hidden=core_hidden, aux_hidden=aux_hidden).to(dev)
     opt = torch.optim.AdamW(m.parameters(), lr=lr, weight_decay=wd)
     n = len(xtr)
     for ep in range(epochs):
@@ -137,6 +138,9 @@ def main():
     p.add_argument('--core-lr', type=float, default=1e-5)
     p.add_argument('--retain-off-weight', type=float, default=2.0)
     p.add_argument('--batch', type=int, default=256)
+    p.add_argument('--dim', type=int, default=256)
+    p.add_argument('--core-hidden', type=int, default=512)
+    p.add_argument('--aux-hidden', type=int, default=64)
     p.add_argument('--retain-off-target', default='teacher',
                    choices=['teacher', 'teacher_mask5', 'label'],
                    help='what the retain-OFF term pins the shipped core to. teacher: KL to '
@@ -170,12 +174,14 @@ def main():
 
     # ---- donor: a model whose CORE already knows 5 -------------------------------------
     if a.donor and a.donor.exists():
-        donor = GramNet().to(dev)
+        donor = GramNet(dim=a.dim, core_hidden=a.core_hidden,
+                        aux_hidden=a.aux_hidden).to(dev)
         donor.load_state_dict(torch.load(a.donor, map_location=dev))
         print(json.dumps(dict(event='donor', source=str(a.donor))), flush=True)
     else:
         print(json.dumps(dict(event='donor', source='training core-only dense on all digits')), flush=True)
-        donor = train_donor(xtr, ytr, dev, gen, a.seed)
+        donor = train_donor(xtr, ytr, dev, gen, a.seed, dim=a.dim,
+                            core_hidden=a.core_hidden, aux_hidden=a.aux_hidden)
         # Save where --donor asked, so a sweep over noise rates does not overwrite one
         # rate's donor with another's.
         dest = a.donor or Path('results/donor_dense_all.pt')

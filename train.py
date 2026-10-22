@@ -63,6 +63,9 @@ class Config:
     # single digit class (e.g. '3'). Their class targets are unchanged.
     route_precision: float = 1.0
     route_fp_source: str = "uniform"
+    dim: int = 256                 # model size; GramNet defaults. core_hidden/aux_hidden
+    core_hidden: int = 512         # scale with it, so the core:aux ratio is explicit rather
+    aux_hidden: int = 64           # than implied -- scaling dim alone also moves that ratio
     p_as: float = 0.5              # aux spread: prob core gets grads on routed aux sub-batch
     p_cr: float = 0.5              # core robustness: prob a random module is active on core sub-batch
     epochs: int = 10
@@ -238,7 +241,8 @@ def run(cfg: Config, out_dir="results"):
     xtr, ytr, xte, yte = load_mnist(device)
     x, y, routed, noise = build_train_tensors(cfg, xtr, ytr)
 
-    model = GramNet().to(device)
+    model = GramNet(dim=cfg.dim, core_hidden=cfg.core_hidden,
+                    aux_hidden=cfg.aux_hidden).to(device)
     parts = partition_params(model)
     opts = {
         k: torch.optim.AdamW(ps, lr=cfg.lr, weight_decay=cfg.weight_decay)
