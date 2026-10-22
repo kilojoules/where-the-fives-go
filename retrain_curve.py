@@ -55,7 +55,10 @@ def run_one(model, parts, mask, k, xtr, ytr, xte, yte, seed, lr):
 HP = {("gram", "best", 0.0): (0.5, 1.0), ("gram", "best", 0.3): (0.75, 1.0),
       ("gram", "default", 0.0): (0.5, 0.5), ("gram", "default", 0.3): (0.5, 0.5),
       ("coreadapt", "best", 0.0): (0.5, 1e-5), ("coreadapt", "best", 0.3): (2.0, 3e-5),
-      ("coreadapt", "default", 0.0): (2.0, 1e-5), ("coreadapt", "default", 0.3): (2.0, 1e-5)}
+      ("coreadapt", "default", 0.0): (2.0, 1e-5), ("coreadapt", "default", 0.3): (2.0, 1e-5),
+      # matched shipped readout, so retraining speed is not confounded by the start point
+      ("gram", "matched", 0.0): (0.5, 1.0), ("coreadapt", "matched", 0.0): (1.0, 3e-5),
+      ("gram", "matched", 0.3): (0.75, 0.25), ("coreadapt", "matched", 0.3): (2.0, 3e-5)}
 ARMS = {  # name -> (mask, attacker-owned partitions)
     "dense":     ((0, 0), ("core",)),
     "filtered":  ((0, 0), ("core",)),
@@ -68,7 +71,8 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--rate", type=float, required=True)
     p.add_argument("--seed", type=int, required=True)
-    p.add_argument("--which", default="best", choices=["best", "default"])
+    p.add_argument("--which", default="best",
+                   choices=["best", "default", "matched"])
     p.add_argument("--k", type=int, default=50)
     p.add_argument("--out", type=Path, required=True)
     a = p.parse_args()

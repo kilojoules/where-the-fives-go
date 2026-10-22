@@ -25,8 +25,9 @@ from matplotlib.lines import Line2D
 import figlang as L
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+WHICH = os.environ.get("RC_WHICH", "best")
 runs = defaultdict(list)
-for f in glob.glob(f"{HERE}/results/rc_r*_best.json"):
+for f in glob.glob(f"{HERE}/results/rc_r*_{WHICH}.json"):
     d = json.load(open(f))
     runs[d["rate"]].append(d)
 ARMS = ["dense", "gram", "coreadapt", "filtered"]
@@ -34,8 +35,8 @@ RATES = sorted(runs)
 INK, GREY = L.C["ink"], L.C["grey"]
 TICKS = [0, 2, 5, 10, 20, 40, 100, 300, 1000]
 
-fig, axes = plt.subplots(1, len(RATES), figsize=(12.4, 6.8), dpi=200, squeeze=False)
-fig.subplots_adjust(left=0.070, right=0.985, top=0.780, bottom=0.255, wspace=0.14)
+fig, axes = plt.subplots(1, len(RATES), figsize=(12.4, 7.2), dpi=200, squeeze=False)
+fig.subplots_adjust(left=0.070, right=0.985, top=0.735, bottom=0.235, wspace=0.14)
 
 summary = {}
 for col, rate in enumerate(RATES):
@@ -104,17 +105,21 @@ txt = "steps to reach 95% of dense:     " + "     ".join(
     for r in RATES)
 fig.text(0.5, 0.030, txt, fontsize=9.0, color=INK, ha="center")
 
-fig.suptitle("Core adaptation retrains fastest — the only route that comes back",
-             fontsize=13.0, x=0.070, ha="left", y=0.970)
+TITLE = {"best": "Core adaptation retrains fastest — the only route that comes back",
+         "matched": "Matched starting point: core adaptation still comes back, GRAM does not"}
+fig.suptitle(TITLE.get(WHICH, TITLE["best"]), fontsize=13.0, x=0.070, ha="left", y=0.970)
 fig.text(0.070, 0.930,
          "Attacker has 50 labeled 5s and fine-tunes the shipped model. Every point is gated "
-         "on the model staying useful (non-5 accuracy ≥ 95%).\nEach method sits at its OWN "
-         "best-forgetting setting, not a library default, and the attacker gets the better "
-         "of two learning rates.\nEvery step is logged to 40, coarsening out to a 1000-step "
+         "on the model staying useful (non-5 accuracy ≥ 95%).\n" +
+         ("Hyperparameters are chosen so the two removal methods SHIP AT THE SAME READOUT, "
+          "so a difference in recovery cannot be a head start.\nAt 30% noise core adaptation "
+          "even starts BELOW GRAM and still recovers.\n" if WHICH == "matched" else
+          "Each method sits at its OWN best-forgetting setting, not a library default, and "
+          "the attacker gets the better of two learning rates.\n") + "Every step is logged to 40, coarsening out to a 1000-step "
          "budget. An earlier version sampled every 25 steps and stopped at 300: the whole\n"
          "recovery fell inside one unsampled gap, and \u201cnever recovers\u201d described "
          "the budget rather than the method.",
          fontsize=8.7, color="#666666", linespacing=1.55, va="top")
-out = f"{HERE}/figures/retrain_curve.png"
+out = f"{HERE}/figures/retrain_curve{'' if WHICH == 'best' else '_' + WHICH}.png"
 fig.savefig(out)
 print(out)

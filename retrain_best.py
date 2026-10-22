@@ -35,6 +35,12 @@ from scale_study import attack, partition_of
 BEST = {("gram", 0.0): (0.5, 1.0), ("gram", 0.3): (0.75, 1.0),
         ("coreadapt", 0.0): (0.5, 1e-5), ("coreadapt", 0.3): (2.0, 3e-5)}
 DEFAULT = {"gram": (0.5, 0.5), "coreadapt": (2.0, 1e-5)}
+# MATCHED: settings chosen so the two methods SHIP at the same readout, so that a
+# difference in retraining speed cannot be explained by one starting closer to the target.
+# Clean matches to 0.0003; at 30% the achievable ranges are disjoint (GRAM tops out at
+# 0.861, core adaptation bottoms out at 0.893) so 0.032 is as close as the grids allow.
+MATCHED = {("gram", 0.0): (0.5, 1.0), ("coreadapt", 0.0): (1.0, 3e-5),
+           ("gram", 0.3): (0.75, 0.25), ("coreadapt", 0.3): (2.0, 3e-5)}
 
 
 def build(method, a, b, rate, seed, dev, kind="fn5", cycles=60):
@@ -63,7 +69,8 @@ def build(method, a, b, rate, seed, dev, kind="fn5", cycles=60):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--method", required=True, choices=["gram", "coreadapt"])
-    p.add_argument("--which", required=True, choices=["best", "default"])
+    p.add_argument("--which", required=True,
+                   choices=["best", "default", "matched"])
     p.add_argument("--rate", type=float, required=True)
     p.add_argument("--seed", type=int, required=True)
     p.add_argument("--ks", type=int, nargs="+", default=[10, 50, 200])
@@ -76,7 +83,9 @@ def main():
     xtr, ytr, xte, yte = load_mnist(dev)
     pos = (yte.cpu().numpy() == TARGET)
 
-    h1, h2 = BEST[(a.method, a.rate)] if a.which == "best" else DEFAULT[a.method]
+    h1, h2 = {"best": BEST.get((a.method, a.rate)),
+              "matched": MATCHED.get((a.method, a.rate)),
+              "default": DEFAULT.get(a.method)}[a.which]
     wp, mask, on, parts = build(a.method, h1, h2, a.rate, a.seed, dev)
 
     def fresh():

@@ -192,6 +192,35 @@ GRAM moves 0.950 -> 0.160 under steering, which looks dramatic until the random 
 too. `elicit5.py` mandates that control for the story track; `steer.py`'s MNIST path lacked
 one, and it was added before any of these numbers were read.
 
+## Retraining from a MATCHED starting point
+
+![matched retraining](figures/retrain_curve_matched.png)
+
+The obvious objection to the retraining comparison is that the arms do not start level: at
+their own best-forgetting settings GRAM ships at 0.706 and core adaptation at 0.813, so
+"core adaptation recovers faster" could just be "core adaptation started closer". The grids
+contain enough settings to remove that confound by choosing hyperparameters that SHIP at the
+same readout.
+
+| noise | matched at | GRAM | core adaptation |
+|---|---|---|---|
+| clean | ~0.74 | starts 0.706, peak 0.755, **never** | starts 0.750, peak 0.984, **26 steps** |
+| 30% | ~0.86 | starts **0.869**, peak 0.887, **never** | starts **0.857**, peak 0.992, **6 steps** |
+
+**The result survives the control, and at 30% noise it inverts the advantage**: core
+adaptation starts BELOW GRAM and still recovers in 6 steps while GRAM never does. The
+difference is not a head start.
+
+GRAM does not merely recover slowly here -- it plateaus. Peak 0.755 against a start of 0.706
+at clean labels, and 0.887 against 0.869 under noise: the attacker moves it a few points and
+then stops making progress, while core adaptation climbs to 0.98+ both times.
+
+**One thing the matching exercise found on its own.** Under 30% mislabeling the two methods'
+achievable readouts are DISJOINT -- GRAM spans 0.582-0.861 across its usable grid, core
+adaptation 0.893-0.985. No tuning brings them level, so the 0.032 gap above is the closest
+the grids allow, and "core adaptation leaves more behind under noise" is a statement about
+every usable setting of both methods rather than about a chosen pair.
+
 ## Retraining: how many labeled 5s undo the removal?
 
 ![retraining attack](figures/retrain.png)
