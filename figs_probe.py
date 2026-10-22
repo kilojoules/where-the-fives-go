@@ -32,22 +32,23 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 D = json.load(open(f"{HERE}/results/instruments3.json"))
 STAGES = ["input", "embed", "block1", "block2", "logits"]
 COLS = STAGES + ["model's own\noutput"]
-# identity by line style AND marker first, colour second, so the panel survives greyscale
-ROWS = [
-    ("dense",         "dense — nothing removed",        "#2a78d6", "-",               "o"),
-    ("filtered",      "filtered — never in the data",   "#d1620a", (0, (5, 2)),       "s"),
-    ("gram_OFF",      "GRAM — module detached (ships)", "#0f7a53", (0, (1, 1.6)),     "^"),
-    ("gram_ON",       "GRAM — module reattached",       "#0f7a53", (0, (1, 3)),       "v"),
-    ("coreadapt_OFF", "core adapt — detached (ships)",  "#4a35b8", (0, (7, 2, 1, 2)), "D"),
-    ("coreadapt_ON",  "core adapt — reattached",        "#4a35b8", (0, (3, 2, 1, 2)), "P"),
-]
+# viridis 0.3-0.9: perceptually uniform, so these six are separable by luminance alone and
+# need no line-style channel. One smooth solid line throughout.
+import matplotlib.cm as _cm, matplotlib.colors as _mc
+_KEYS = ["dense", "filtered", "gram_OFF", "gram_ON", "coreadapt_OFF", "coreadapt_ON"]
+_LABS = ["dense — nothing removed", "filtered — never in the data",
+         "GRAM — module detached (ships)", "GRAM — module reattached",
+         "core adapt — detached (ships)", "core adapt — reattached"]
+_COLS = [_mc.to_hex(_cm.viridis(v)) for v in
+         [0.3 + 0.6 * i / (len(_KEYS) - 1) for i in range(len(_KEYS))]]
+ROWS = [(k, l, c, "-", "o") for k, l, c in zip(_KEYS, _LABS, _COLS)]
 INK, GREY = "#333333", "#9a9a92"
 FLOOR = D["probe"]["dense"]["input"]
 
 fig, ax = plt.subplots(figsize=(11.6, 6.6), dpi=200)
 fig.subplots_adjust(left=0.075, right=0.985, top=0.735, bottom=0.125)
 
-ax.axhspan(0.50, FLOOR, color="#f4f4f2", zorder=0)
+ax.axhspan(0.50, FLOOR, color="#fafaf8", zorder=0)
 ax.axhline(FLOOR, color=GREY, lw=1.3, ls="--", zorder=2)
 ax.text(0.05, FLOOR + 0.006,
         f"raw-pixel floor {FLOOR:.3f} — above this line a probe is reading MNIST, not the model",

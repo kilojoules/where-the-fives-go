@@ -52,15 +52,18 @@ C = {"dense": "#2a78d6", "filtered": "#eb6834", "gram": "#1baf7a",
      "coreadapt": "#6250d6", "grey": "#9a9a92", "ink": "#333333"}
 
 
-# Identity must survive black-and-white printing and colour blindness, so every arm carries
-# a distinct LINE STYLE and MARKER as well as a colour, and the greys below are chosen to be
-# distinguishable in luminance alone. Colour is the redundant channel, never the only one.
-STYLE = {
-    "dense":     dict(color="#2a78d6", ls="-",            marker="o", lw=2.0, ms=5.5),
-    "filtered":  dict(color="#d1620a", ls=(0, (5, 2)),    marker="s", lw=2.0, ms=5.0),
-    "gram":      dict(color="#0f7a53", ls=(0, (1, 1.6)),  marker="^", lw=2.4, ms=5.5),
-    "coreadapt": dict(color="#4a35b8", ls=(0, (7, 2, 1, 2)), marker="D", lw=2.0, ms=4.8),
-}
+# Identity is carried by COLOUR sampled from viridis between 0.3 and 0.9. viridis is
+# perceptually uniform and monotonic in lightness, so those four samples have luminances
+# 87.5 / 110.6 / 145.2 / 191.6 -- a minimum gap of 23, against 12 for the old hand-picked
+# palette. That makes the figures readable in greyscale without dashes: one smooth solid
+# line everywhere, and no line-style channel to decode.
+import matplotlib.cm as _cm
+import matplotlib.colors as _mc
+
+_ORDER = ["dense", "filtered", "gram", "coreadapt"]
+_V = [0.3, 0.5, 0.7, 0.9]
+VIRIDIS = {k: _mc.to_hex(_cm.viridis(v)) for k, v in zip(_ORDER, _V)}
+STYLE = {k: dict(color=VIRIDIS[k], ls="-", marker="o", lw=2.3, ms=5.6) for k in _ORDER}
 LABEL = {
     "dense": "dense — nothing removed",
     "filtered": "filtered — never in the data",

@@ -25,11 +25,13 @@ import matplotlib.pyplot as plt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 D = json.load(open(f"{HERE}/results/instruments3.json"))
-# line style and marker carry identity; colour is redundant so this reads in greyscale
-SHOW = [("dense", "dense — nothing removed", "#2a78d6", "-", "o"),
-        ("filtered", "filtered — never in the data", "#d1620a", (0, (5, 2)), "s"),
-        ("gram_OFF", "GRAM — module detached (ships)", "#0f7a53", (0, (1, 1.6)), "^"),
-        ("coreadapt_OFF", "core adapt — detached (ships)", "#4a35b8", (0, (7, 2, 1, 2)), "D")]
+# viridis 0.3-0.9 separates these by luminance, so one smooth solid line is enough.
+# The matched-norm control stays dotted: that is a different MEASUREMENT, not a different arm.
+import figlang as _L
+SHOW = [("dense", "dense — nothing removed", _L.VIRIDIS["dense"], "-", "o"),
+        ("filtered", "filtered — never in the data", _L.VIRIDIS["filtered"], "-", "o"),
+        ("gram_OFF", "GRAM — module detached (ships)", _L.VIRIDIS["gram"], "-", "o"),
+        ("coreadapt_OFF", "core adapt — detached (ships)", _L.VIRIDIS["coreadapt"], "-", "o")]
 INK, GREY = "#333333", "#9a9a92"
 alphas = sorted(D["steer"]["dense"]["self_dm"], key=float)
 xa = [float(a) for a in alphas]
