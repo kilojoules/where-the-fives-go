@@ -86,7 +86,7 @@ for rate in (0.0, 0.3):
                         lab=f"w={w:g}/lr={lr:g}"))
     CA[rate] = front(pts)
 
-fig, ax = plt.subplots(figsize=(11.4, 7.0), dpi=200)
+fig, ax = plt.subplots(figsize=(11.4, 7.6), dpi=200)
 fig.subplots_adjust(left=0.080, right=0.980, top=0.740, bottom=0.098)
 
 SERIES = [
@@ -158,6 +158,17 @@ fig.text(0.080, 0.845,
          "core adaptation as the TEACHER's\nopinion, and the teacher reads the image "
          "correctly whatever the label says.",
          fontsize=8.8, color=INK, linespacing=1.55, va="top")
+# Both axes here are the model's OWN behaviour. A linear probe fitted on the ten logits
+# recovers far more than logit 5 alone, for every usable setting of either method -- so this
+# figure says which method EMITS less, not which leaves less behind.
+fig.text(0.080, 0.772,
+         "Caveat: both axes are what the model EMITS. A linear probe on its ten logits "
+         "recovers 0.93\u20130.99 for every usable setting of either\nmethod, against readouts "
+         "as low as 0.48 \u2014 GRAM's knee here reads 0.549 by readout and 0.927 by probe. "
+         "Read this as which method emits\nless, not which leaves less behind; see "
+         "figures/probe_vs_readout.png.",
+         fontsize=8.0, color="#9a6a2a", linespacing=1.5, va="top")
+
 out = f"{HERE}/figures/compare_pareto.png"
 fig.savefig(out)
 print(out)

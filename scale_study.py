@@ -52,10 +52,7 @@ ARMS = {  # name -> (train kwargs, shipped mask, partitions an attacker owns)
     "core_adapt5": (None, (0, 0), ("core",)),
 }
 CA_CYCLES = 60          # the operating point established in CORE_ADAPTATION.md
-# The probe was the bottleneck: 5 stages x 60 epochs x 12 batches = 3600 tiny
-# optimizer steps per cell, pure interpreter overhead, leaving 90+ cores idle.
-# Full-batch LBFGS-style fitting on a linear head converges in far fewer passes.
-PROBE_EPOCHS, ATTACK_STEPS, ATTACK_BATCH = 15, 300, 32
+ATTACK_STEPS, ATTACK_BATCH = 300, 32
 
 
 def stages_of(model, x, mask, bs=2048):
@@ -74,22 +71,38 @@ def stages_of(model, x, mask, bs=2048):
     return {k: torch.cat(v) for k, v in outs.items()}
 
 
-def binary_probe_auc(ftr, ytr_bin, fte, yte_bin, seed):
-    """One-logit 5-vs-rest probe, scored by AUC -- the ranking question, asked directly."""
+def binary_probe_auc(ftr, ytr_bin, fte, yte_bin, seed, iters=200):
+    """One-logit 5-vs-rest probe, fitted with LBFGS and scored by AUC.
+
+    This was SGD for a fixed epoch budget, and that was wrong twice over. Fitting a linear
+    head is a small CONVEX problem, so the answer should not depend on how long a first-order
+    optimiser was allowed to run -- and it did: on the same checkpoint the probe read 0.8364
+    at 15 epochs, 0.8849 at 60 and 0.9319 at 200, still climbing. Worse, 0.8364 is BELOW the
+    model's own raw logit-5 AUC of 0.8370, which is impossible for a converged probe, since
+    'use logit 5 alone' is one of the linear combinations available to it. An underfit probe
+    silently understates what an attacker can recover, which is the one direction an
+    elicitation instrument must never err in.
+
+    LBFGS solves it properly in one shot and is faster than the epoch loop it replaces.
+    """
     torch.manual_seed(seed)
     mu, sd = ftr.mean(0, keepdim=True), ftr.std(0, keepdim=True) + 1e-6
     ftr, fte = (ftr - mu) / sd, (fte - mu) / sd
     head = torch.nn.Linear(ftr.shape[1], 1)
-    opt = torch.optim.AdamW(head.parameters(), lr=1e-2, weight_decay=1e-4)
-    gen = torch.Generator().manual_seed(seed)
-    pos_w = torch.tensor([(ytr_bin == 0).sum() / max(1, (ytr_bin == 1).sum())])
-    for _ in range(PROBE_EPOCHS):
-        perm = torch.randperm(len(ftr), generator=gen)
-        for i in range(0, len(ftr), 4096):
-            b = perm[i:i + 1024]
-            loss = F.binary_cross_entropy_with_logits(
-                head(ftr[b]).squeeze(1), ytr_bin[b].float(), pos_weight=pos_w)
-            opt.zero_grad(); loss.backward(); opt.step()
+    pos_w = torch.tensor([(ytr_bin == 0).sum() / max(1, (ytr_bin == 1).sum())], dtype=torch.float)
+    y = ytr_bin.float()
+    opt = torch.optim.LBFGS(head.parameters(), max_iter=iters, history_size=20,
+                            tolerance_grad=1e-9, tolerance_change=1e-12,
+                            line_search_fn="strong_wolfe")
+
+    def closure():
+        opt.zero_grad()
+        loss = F.binary_cross_entropy_with_logits(head(ftr).squeeze(1), y, pos_weight=pos_w)
+        loss = loss + 1e-4 * head.weight.pow(2).sum()        # keeps it finite if separable
+        loss.backward()
+        return loss
+
+    opt.step(closure)
     with torch.no_grad():
         return auc(head(fte).squeeze(1).numpy(), yte_bin.numpy().astype(bool))
 
