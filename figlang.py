@@ -65,7 +65,11 @@ import matplotlib.colors as _mc
 _ORDER = ["dense", "gram", "coreadapt", "filtered"]
 _V = [0.3, 0.5, 0.7, 0.9]
 VIRIDIS = {k: _mc.to_hex(_cm.viridis(v)) for k, v in zip(_ORDER, _V)}
-STYLE = {k: dict(color=VIRIDIS[k], ls="-", marker="o", lw=2.3, ms=5.6) for k in _ORDER}
+# distinct marker shape per arm: a second channel that survives greyscale, photocopying
+# and overlapping lines, without reintroducing dashes
+_MARK = {"dense": "o", "gram": "s", "coreadapt": "^", "filtered": "D"}
+STYLE = {k: dict(color=VIRIDIS[k], ls="-", marker=_MARK[k], lw=2.3,
+                 ms=6.4 if _MARK[k] != "D" else 5.8) for k in _ORDER}
 LABEL = {
     "dense": "dense — nothing removed",
     "filtered": "filtered — never in the data",
