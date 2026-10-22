@@ -192,6 +192,42 @@ GRAM moves 0.950 -> 0.160 under steering, which looks dramatic until the random 
 too. `elicit5.py` mandates that control for the story track; `steer.py`'s MNIST path lacked
 one, and it was added before any of these numbers were read.
 
+## Probe on the logits against the model's own readout
+
+![probe vs readout](figures/probe_vs_readout.png)
+
+Both axes read the output layer and differ only in what may look at it. The **readout** is
+raw logit 5 -- what a user who only sees outputs gets. The **probe** is a binary 5-vs-rest
+linear probe over all ten logits -- what an attacker who can fit a readout gets. Since "use
+logit 5" is one of the combinations available to the probe, it can never score lower, and the
+gap between them is capability left lying in the OTHER NINE logits.
+
+240 runs: 42 usable settings across both methods and both noise levels, 3 seeds each.
+
+| | usable | probe | readout | mean gap |
+|---|---:|---|---|---:|
+| GRAM, clean | 11 | 0.950-0.998 | 0.668-0.979 | +0.103 |
+| GRAM, 30% mislabeled | 7 | 0.927-0.967 | 0.549-0.885 | **+0.188** |
+| core adaptation, clean | 12 | 0.940-0.986 | 0.656-0.799 | **+0.240** |
+| core adaptation, 30% mislabeled | 12 | 0.936-0.993 | 0.849-0.981 | +0.047 |
+
+**No setting of either method gets the probe below 0.927**, while readouts reach 0.549. The
+readout axis -- which every other front in this file uses -- is the optimistic one. GRAM's
+best noisy setting reads 0.549 by readout and 0.927 by probe: near-total removal to anyone
+watching outputs, almost nothing removed to anyone who fits a linear head.
+
+The gap moves in opposite directions with noise, which matches the mechanism. GRAM's widens
+(+0.103 -> +0.188): the wrong-label gradient pushes capability out of logit 5 and into the
+other nine rather than destroying it. Core adaptation's narrows (+0.240 -> +0.047) because
+its readout rises to meet an already-high probe -- the teacher restores logit 5 itself.
+
+**Instrument note.** These numbers use an LBFGS-fitted probe. An earlier SGD version with a
+fixed epoch budget read 0.8364 where LBFGS reads 0.9552 on the same checkpoint, and was
+*below* that model's own raw logit-5 AUC of 0.8370 -- impossible for a converged probe. The
+standing check is that probe >= readout; it now holds in 240 of 240 runs. An underfit probe
+understates what an attacker recovers, which is the one direction this instrument must not
+err in.
+
 ## The two methods side by side
 
 ![GRAM vs core adaptation](figures/compare_pareto.png)
