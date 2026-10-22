@@ -17,7 +17,7 @@ does break: at retain_off_weight=0 the pinning term is gone and retention falls 
 Those cells post the lowest leak in the whole grid while having lost up to 45% of the other
 digits, which is the same trap as a GRAM cell that never learned a 5.
 
-  x  INFORMATION = |AUC(logit 5) - 0.5| on the shipped core (module detached).  Lower better.
+  x  READOUT ABOVE CHANCE = |AUC(logit 5) - 0.5| on the shipped core (module detached).  Lower better.
   y  CAPABILITY  = module-ON recall on 5s.                                      Higher better.
 
 Only non-dominated, retention-safe settings are drawn.
@@ -31,6 +31,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+
+import figlang as L
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 RET_BAR = 0.95
@@ -95,7 +97,7 @@ for rate in RATES:
     summary.append(f"{'clean' if rate == 0 else f'{rate:.0%} mislabeled'}: "
                    f"{len(F)} of {len(pts) + dropped} settings on the front "
                    f"({dropped} dropped for retention < {RET_BAR:.2f}), "
-                   f"best information {min(p['info'] for p in F):.3f}")
+                   f"lowest readout above chance {min(p['info'] for p in F):.3f}")
 
 allpts.sort(key=lambda p: (p["info"], p["cap"]))
 for i, p in enumerate(allpts):
@@ -105,9 +107,9 @@ for i, p in enumerate(allpts):
                 xytext=(0, 11 + 11 * len(near)), textcoords="offset points",
                 fontsize=7.4, color=p["colour"], ha="center")
 
-ax.set_xlabel("INFORMATION left in the shipped core   |AUC(logit 5) − 0.5|   ←  better",
+ax.set_xlabel(L.READOUT_FOLDED,
               fontsize=9.2)
-ax.set_ylabel("CAPABILITY   module-ON recall on 5s   better  →", fontsize=9.2)
+ax.set_ylabel(L.CAPABILITY_DIR, fontsize=9.2)
 ax.grid(True, color="#ececec", lw=0.6, zorder=0)
 ax.set_axisbelow(True)
 for sp in ("top", "right"):
@@ -124,7 +126,7 @@ fig.text(0.080, 0.938,
          "(core_adapt5.py:246) — the leak path itself.\n"
          "Settings whose other-nine retention fell below 0.95 are dropped first: at "
          "retain_off_weight=0 the pinning term is gone and retention\n"
-         "collapses to 0.18–0.55, which posts the lowest leak in the grid from a model that "
+         "collapses to 0.18–0.55, which posts the lowest readout in the grid from a model that "
          "lost up to 45% of its other digits.",
          fontsize=8.4, color="#666666", linespacing=1.5, va="top")
 fig.text(0.080, 0.800, "\n".join("      " + s for s in summary),

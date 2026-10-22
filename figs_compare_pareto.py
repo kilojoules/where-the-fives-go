@@ -1,9 +1,9 @@
 """One front per method per noise level: GRAM against core adaptation.
 
-Both methods are scored identically -- information left in the SHIPPED model, against the
+Both methods are scored identically -- readout left above chance in the SHIPPED model, against the
 capability it still has when the module is attached:
 
-  x  INFORMATION = |AUC(raw logit 5) - 0.5| on held-out 5s, shipped configuration.
+  x  READOUT ABOVE CHANCE = |AUC(raw logit 5) - 0.5| on held-out 5s, shipped configuration.
                    0 means the shipped readout orders 5s no better than a coin.
                    Not softmax P(5): the two disagree in sign under label noise (INSTRUMENT.md).
   y  CAPABILITY  = recall on 5s with the module attached.
@@ -12,7 +12,7 @@ What differs is each method's own knobs and its own failure mode, so each gets t
 matches what actually breaks for it:
 
   GRAM             p_as x p_cr, 25 settings. Drops settings where fewer than 80% of seeds
-                   learned 5 at all -- their low leak means the model never acquired the digit.
+                   learned 5 at all -- their low readout means the model never acquired the digit.
   core adaptation  retain_off_weight x core_lr, 15 settings. The capability is COPIED from a
                    donor that already has it, so instead retention breaks: drops settings whose
                    other-nine accuracy fell below 0.95.
@@ -29,6 +29,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+
+import figlang as L
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 GRAM_C, CA_C, INK, GREY = "#1baf7a", "#6250d6", "#333333", "#9a9a92"
@@ -137,9 +139,8 @@ for i, (xx, yy, lab, col) in enumerate(_ALL_LABELS):
                 fontsize=7.3, color=col, ha="center",
                 arrowprops=dict(arrowstyle="-", color=col, lw=0.6, alpha=0.45))
 
-ax.set_xlabel("INFORMATION left in the shipped model   |AUC(logit 5) − 0.5|"
-              "        ←  better removal", fontsize=9.4)
-ax.set_ylabel("CAPABILITY it still has   recall on 5s, module attached   better  →",
+ax.set_xlabel(L.READOUT_FOLDED, fontsize=9.4)
+ax.set_ylabel(L.CAPABILITY_DIR,
               fontsize=9.4)
 ax.set_xlim(0.015, 0.545)
 ax.set_ylim(0.735, 1.025)
@@ -162,7 +163,7 @@ fig.text(0.080, 0.948,
          "core adaptation by whether the other nine digits survived.",
          fontsize=8.5, color="#666666", linespacing=1.5, va="top")
 fig.text(0.080, 0.833,
-         f"GRAM gets BETTER under noise:  {gc:.3f} → {gn:.3f} information at its best "
+         f"GRAM gets BETTER under noise:  {gc:.3f} → {gn:.3f} readout above chance at its best "
          f"setting.    Core adaptation gets WORSE:  {cc:.3f} → {cn:.3f}.\n"
          "A mislabeled 5 reaches GRAM as a wrong LABEL, which pushes logit 5 down. It reaches "
          "core adaptation as the TEACHER's\nopinion, and the teacher reads the image "

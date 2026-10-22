@@ -21,6 +21,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
+import figlang as L
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 rows = json.load(open(f"{HERE}/results/elicit_three.json"))
 SHIPS = [("dense_all", "dense — nothing removed", "#2a78d6"),

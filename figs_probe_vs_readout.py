@@ -20,6 +20,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
+import figlang as L
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 GREEN, PURPLE, INK, GREY = "#1baf7a", "#6250d6", "#333333", "#9a9a92"
 
@@ -89,8 +91,8 @@ ax.text(0.999, 0.985, "probe = readout", fontsize=8.6, color=GREY, ha="right", v
 
 ax.set_xlim(0.885, 1.008)
 ax.set_ylim(0.44, 1.01)
-ax.set_xlabel("PROBE  —  linear probe on all ten logits", fontsize=10.5)
-ax.set_ylabel("READOUT  —  the model's own logit 5", fontsize=10.5)
+ax.set_xlabel(L.PROBE, fontsize=10.5)
+ax.set_ylabel(L.READOUT, fontsize=10.5)
 ax.grid(True, color="#ececec", lw=0.6, zorder=0)
 ax.set_axisbelow(True)
 for sp in ("top", "right"):

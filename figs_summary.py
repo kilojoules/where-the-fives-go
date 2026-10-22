@@ -23,6 +23,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
+import figlang as L
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 SEEDS = [s for s in range(8) if os.path.exists(f"{HERE}/results/absorb3_seed{s}.json")]
 A = {s: json.load(open(f"{HERE}/results/absorb3_seed{s}.json")) for s in SEEDS}
@@ -94,9 +96,9 @@ for pas, colour in PAS:
     bx.annotate(f"p_as={pas:g}", (xs[0], ys[0]), xytext=(-8, -15),
                 textcoords="offset points", fontsize=8.0, color=colour, ha="right")
 
-bx.set_xlabel("LEAK  —  AUC over raw logit 5 with module 5 ablated  →  worse removal",
+bx.set_xlabel(L.READOUT_FOLDED,
               fontsize=8.6)
-bx.set_ylabel("CAPABILITY  —  recall on 5s with the module attached", fontsize=8.9)
+bx.set_ylabel(L.CAPABILITY, fontsize=8.9)
 bx.set_title("GRAM's p_as buys capability and costs leak", fontsize=10.2, color=INK, loc="left")
 bx.set_xlim(0.38, 1.03)
 bx.set_ylim(-0.06, 1.10)

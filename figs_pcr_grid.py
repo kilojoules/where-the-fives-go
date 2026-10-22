@@ -4,7 +4,7 @@ Reads results/pcrgrid_s*_r*.json (13 seeds x 3 noise rates x 25 cells).
 
 Every earlier sweep in this repo pinned p_cr=0.5 and moved p_as alone. This grid moves both.
 
-Top row scores INFORMATION = |leak - 0.5|, not the raw AUC. Below-chance leak is still
+Top row scores READOUT ABOVE CHANCE = |leak - 0.5|, not the raw AUC. Below-chance leak is still
 information with the sign flipped -- a cell at 0.28 is anti-ranked, not clean -- so ranking by
 raw AUC would crown the p_cr=0 column, which is wrong. 0.00 means the shipped readout is a
 coin: nothing recoverable from logit 5 by ranking.
@@ -114,7 +114,7 @@ for col, rate in enumerate(RATES):
             use[i, j] = np.mean([x["capability"] > 0.8 for x in v])
 
     for row, (M, cmap, vmax, title) in enumerate([
-            (info, "YlOrRd", 0.5, "information left in the shipped core  |AUC(logit 5) − 0.5|"),
+            (info, "YlOrRd", 0.5, "readout left above chance  |AUC(logit 5) − 0.5|"),
             (use, "Blues", 1.0, "fraction of seeds that learned 5 at all  (module-ON recall > 0.8)")]):
         ax = axes[row, col]
         im = ax.imshow(M, cmap=cmap, vmin=0, vmax=vmax, origin="lower", aspect="auto")
@@ -163,7 +163,7 @@ for col, rate in enumerate(RATES):
 
 hl = "\n".join(
     f"  {r:.0%} mislabeled  →  p_as={PICK[r][0]:<4g} p_cr={PICK[r][1]:<4g}   "
-    f"held-out information {HELD[r]['info']:.3f} "
+    f"held-out readout above chance {HELD[r]['info']:.3f} "
     f"(baseline {agg(ALLSEEDS, (r, 0.5, 0.5))['info']:.3f})   "
     f"modal pick in {FREQ[r]:.0%} of splits" for r in RATES if r in PICK)
 fig.suptitle("Choosing p_as and p_cr for each noise level",

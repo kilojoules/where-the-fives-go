@@ -7,8 +7,8 @@ that teaches the core "5-pixels -> 5", which is what makes the module's job lear
 it is also the leak. So every point here is a choice about how much of the capability you are
 willing to leave recoverable in what you ship.
 
-  x  INFORMATION = |AUC(logit 5) - 0.5| on the shipped core.   Lower is better.
-     Not raw AUC: below-chance leak is still information with the sign flipped, so a cell at
+  x  READOUT ABOVE CHANCE = |AUC(logit 5) - 0.5| on the shipped core.   Lower is better.
+     Not raw AUC: a below-chance readout is still information with the sign flipped, so a cell at
      0.28 is anti-ranked, not clean. See INSTRUMENT.md.
   y  CAPABILITY = module-ON recall on 5s.                      Higher is better.
 
@@ -26,6 +26,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+
+import figlang as L
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 cells = defaultdict(list)
@@ -94,9 +96,9 @@ for i, p in enumerate(allpts):
 ax.text(0.015, 0.955, "labels are  p_as / p_cr", transform=ax.transAxes,
         fontsize=8.0, color=GREY)
 
-ax.set_xlabel("INFORMATION left in the shipped core   |AUC(logit 5) − 0.5|   ←  better",
+ax.set_xlabel(L.READOUT_FOLDED,
               fontsize=9.2)
-ax.set_ylabel("CAPABILITY   module-ON recall on 5s   better  →", fontsize=9.2)
+ax.set_ylabel(L.CAPABILITY_DIR, fontsize=9.2)
 xs = [p["info"] for p in allpts]; ys = [p["cap"] for p in allpts]
 ax.set_xlim(min(xs) - 0.035, max(xs) + 0.035)
 ax.set_ylim(min(ys) - 0.045, max(ys) + 0.055)
@@ -109,10 +111,10 @@ ax.tick_params(labelsize=8.4)
 ax.legend(fontsize=8.6, frameon=False, loc="lower right", handletextpad=0.5,
           labelspacing=0.7)
 
-fig.suptitle("What you can actually buy: information left against capability kept",
+fig.suptitle("What you can actually buy: readout left above chance, against capability kept",
              fontsize=12.6, x=0.078, ha="left", y=0.980)
 fig.text(0.078, 0.945,
-         "Each point is one (p_as, p_cr) setting averaged over 13 seeds, and ONLY non-dominated settings are drawn: a dominated one is\nstrictly worse on both axes, so it is a choice nobody should make. The step line is the front.\nThe two objectives pull against each other through one channel — p_as is the only route that teaches the core ‘5-pixels → 5’,\nwhich is what makes the module's job learnable, and it is also the leak.\nSettings where fewer than 80% of seeds learned the digit are dropped before the front is computed: their low information means\nthe model never learned 5, not that removal worked, and that confusion is the most repeated error in this campaign.",
+         "Each point is one (p_as, p_cr) setting averaged over 13 seeds, and only the best trade-offs are drawn — a setting appears if nothing\nbeat it on BOTH axes at once. The step line is the front.\nThe two objectives pull against each other through one channel — p_as is the only route that teaches the core ‘5-pixels → 5’,\nwhich is what makes the module's job learnable, and it is also the leak.\nSettings where fewer than 80% of seeds learned the digit are dropped before the front is computed: their low readout means\nthe model never learned 5, not that removal worked, and that confusion is the most repeated error in this campaign.",
          fontsize=8.4, color="#666666", linespacing=1.5, va="top")
 fig.text(0.078, 0.790, "\n".join(summary), fontsize=8.4, color=INK,
          linespacing=1.5, va="top")
