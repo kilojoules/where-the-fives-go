@@ -21,7 +21,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-GREEN, PURPLE, INK, GREY, RED = "#1baf7a", "#6250d6", "#333333", "#9a9a92", "#b03a2e"
+GREEN, PURPLE, INK, GREY = "#1baf7a", "#6250d6", "#333333", "#9a9a92"
 
 cells = defaultdict(list)
 for f in glob.glob(f"{HERE}/results/pvr_*.json"):
@@ -84,10 +84,6 @@ for i, p in enumerate(drawn):
                 arrowprops=dict(arrowstyle="-", color=p["colour"], lw=0.6, alpha=0.5))
 
 FLOOR = min(p[0] for p in pts_all)
-ax.axvspan(0.86, FLOOR, color="#f2f7f4", zorder=0)
-ax.axvline(FLOOR, color=RED, lw=1.8, zorder=3)
-ax.text(FLOOR - 0.006, 0.985, f"nothing reaches here\nprobe floor {FLOOR:.2f}",
-        fontsize=9.5, color=RED, ha="right", va="top", linespacing=1.45)
 ax.plot([0.40, 1.01], [0.40, 1.01], color=GREY, lw=1.2, ls=":", zorder=1)
 ax.text(0.999, 0.985, "probe = readout", fontsize=8.6, color=GREY, ha="right", va="top")
 
