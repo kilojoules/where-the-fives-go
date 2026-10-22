@@ -32,7 +32,7 @@ for f in glob.glob(f"{HERE}/results/rc_r*_best.json"):
 ARMS = ["dense", "gram", "coreadapt", "filtered"]
 RATES = sorted(runs)
 INK, GREY = L.C["ink"], L.C["grey"]
-TICKS = [0, 2, 5, 10, 20, 40, 100, 300]
+TICKS = [0, 2, 5, 10, 20, 40, 100, 300, 1000]
 
 fig, axes = plt.subplots(1, len(RATES), figsize=(12.4, 5.9), dpi=200, squeeze=False)
 fig.subplots_adjust(left=0.070, right=0.985, top=0.760, bottom=0.200, wspace=0.14)
@@ -44,7 +44,7 @@ for col, rate in enumerate(RATES):
     dense_end = np.mean([d["curves"]["dense"][-1][1] for d in ds if "dense" in d["curves"]])
     tgt = 0.95 * dense_end
     ax.axhline(tgt, color="#555555", lw=1.1, ls=(0, (2, 2)), zorder=2)
-    ax.text(310, tgt + 0.009, "95% of dense", fontsize=8.0, color="#555555", ha="right")
+    ax.text(1120, tgt + 0.009, "95% of dense", fontsize=8.0, color="#555555", ha="right")
 
     for key in ARMS:
         cs = [d["curves"][key] for d in ds if key in d["curves"]]
@@ -66,7 +66,7 @@ for col, rate in enumerate(RATES):
     ax.set_xscale("symlog", linthresh=10)
     ax.set_xticks(TICKS)
     ax.set_xticklabels([str(t) for t in TICKS], fontsize=8.6)
-    ax.set_xlim(-0.3, 330)
+    ax.set_xlim(-0.3, 1150)
     ax.set_ylim(0.38, 1.04)
     ax.set_xlabel("fine-tuning steps", fontsize=9.4)
     if col == 0:
