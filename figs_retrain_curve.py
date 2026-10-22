@@ -109,8 +109,10 @@ fig.text(0.070, 0.930,
          "Attacker has 50 labeled 5s and fine-tunes the shipped model. Every point is gated "
          "on the model staying useful (non-5 accuracy ≥ 95%).\nEach method sits at its OWN "
          "best-forgetting setting, not a library default, and the attacker gets the better "
-         "of two learning rates.\nEvery step is logged to 40: an earlier version sampled "
-         "every 25 steps and the whole recovery fell inside one unsampled gap.",
+         "of two learning rates.\nEvery step is logged to 40, coarsening out to a 1000-step "
+         "budget. An earlier version sampled every 25 steps and stopped at 300: the whole\n"
+         "recovery fell inside one unsampled gap, and \u201cnever recovers\u201d described "
+         "the budget rather than the method.",
          fontsize=8.7, color="#666666", linespacing=1.55, va="top")
 out = f"{HERE}/figures/retrain_curve.png"
 fig.savefig(out)
