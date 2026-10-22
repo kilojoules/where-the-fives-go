@@ -155,6 +155,43 @@ the capability would, which defeats the purpose of having one. Any distillation-
 that pins a student to a teacher on a "retain" set defined by labels inherits this, and the
 200M campaign's core adaptation arm is built the same way.
 
+## Probing and steering, clean labels
+
+![probe depth](figures/probe_depth.png)
+
+Circles are linear probes at each depth; the diamond is the model's OWN output, scored as AUC
+over its raw logit 5. The gap between the two is the elicitation question -- an attacker who
+can fit a readout gets the circle, a user who only sees outputs gets the diamond.
+
+| arm | probe @ logits | model's own output | gap |
+|---|---:|---:|---:|
+| dense | 0.996 | 0.997 | -0.000 |
+| filtered | 0.780 | 0.583 | **+0.197** |
+| GRAM, detached | 0.701 | 0.851 | **-0.150** |
+| core adaptation, detached | 0.943 | 0.737 | **+0.206** |
+
+Read the DECAY, not the height: raw pixels already score 0.956, so any trunk number near 0.96
+is describing MNIST. Filtering decays hardest (0.981 -> 0.780), GRAM next (0.996 -> 0.701),
+core adaptation barely at all (0.997 -> 0.943). Detaching GRAM's module costs 8 points of
+block2; detaching core adaptation's costs 0.3, because its core never gave the capability up.
+
+**The gap column is why the logits probe is not trusted.** For GRAM it lands 0.150 BELOW the
+model's own output and for core adaptation 0.206 ABOVE it. A faithful readout cannot do both.
+That column comes from `layer_probe.probe_fit`, a 10-way CE head read at column 5, and is
+superseded by the binary probe in `scale_study.py`; the trunk columns are sound.
+
+![steering](figures/steering.png)
+
+Steering is a flat null. The best alpha for every arm is **0** -- the untouched shipped model
+-- and past alpha=0.5 the learned difference-of-means direction destroys the readout FASTER
+than a random direction of the same norm. The right panel is that difference and it is
+negative at every strength for every arm.
+
+Without the matched-norm control the solid curves would read as a discovered 5-direction:
+GRAM moves 0.950 -> 0.160 under steering, which looks dramatic until the random control moves
+too. `elicit5.py` mandates that control for the story track; `steer.py`'s MNIST path lacked
+one, and it was added before any of these numbers were read.
+
 ## The two methods side by side
 
 ![GRAM vs core adaptation](figures/compare_pareto.png)
