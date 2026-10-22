@@ -119,7 +119,7 @@ fig.suptitle("Core adaptation: no setting escapes the teacher leak",
              fontsize=12.6, x=0.080, ha="left", y=0.975)
 fig.text(0.080, 0.938,
          "Each point is one (retain_off_weight, core_lr) setting averaged over "
-         f"{len(SEEDS)} seeds; only non-dominated settings are drawn.\n"
+         f"{len(SEEDS)} seeds; only the best trade-offs are drawn \u2014 a setting appears if nothing beat it on BOTH axes.\n"
          "retain_off_weight is the term that pins the shipped core to the donor teacher "
          "(core_adapt5.py:246) — the leak path itself.\n"
          "Settings whose other-nine retention fell below 0.95 are dropped first: at "

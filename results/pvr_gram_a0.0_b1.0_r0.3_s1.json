@@ -1,0 +1,20 @@
+{
+ "method": "gram",
+ "a": 0.0,
+ "b": 1.0,
+ "rate": 0.3,
+ "seed": 1,
+ "probe_by_depth": {
+  "embed": 0.937487137410368,
+  "block1": 0.9632809376667829,
+  "block2": 0.9652129109381985,
+  "logits": 0.949948709654549
+ },
+ "probe_logits": 0.949948709654549,
+ "probe_logits_info": 0.44994870965454903,
+ "probe_best_trunk": 0.9652129109381985,
+ "readout_auc": 0.5250776186509273,
+ "readout_info": 0.02507761865092728,
+ "capability": 0.0,
+ "acc_others": 0.8333333134651184
+}

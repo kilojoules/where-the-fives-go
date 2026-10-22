@@ -17,7 +17,7 @@ matches what actually breaks for it:
                    donor that already has it, so instead retention breaks: drops settings whose
                    other-nine accuracy fell below 0.95.
 
-Only non-dominated settings are drawn. A dominated one is worse on both axes, so nobody should
+Only the best trade-offs are drawn: a setting appears if nothing beat it on BOTH axes. A dominated one is worse on both axes, so nobody should
 pick it, and plotting it only adds ink.
 """
 import glob
@@ -86,9 +86,10 @@ for rate in (0.0, 0.3):
                         lab=f"w={w:g}/lr={lr:g}"))
     CA[rate] = front(pts)
 
-fig, ax = plt.subplots(figsize=(11.4, 7.6), dpi=200)
-fig.subplots_adjust(left=0.080, right=0.980, top=0.740, bottom=0.098)
+fig, ax = plt.subplots(figsize=(11.4, 8.8), dpi=200)
+fig.subplots_adjust(left=0.080, right=0.980, top=0.660, bottom=0.085)
 
+_ALL_LABELS = []   # every drawn point gets its hyperparameters
 SERIES = [
     (GRAM[0.0], GRAM_C, "o", "none", "--", "GRAM — clean labels"),
     (GRAM[0.3], GRAM_C, "o", GRAM_C, "-",  "GRAM — 30% mislabeled"),
@@ -102,11 +103,10 @@ for F, colour, mk, fill, ls, label in SERIES:
             alpha=0.85, zorder=3, drawstyle="steps-post")
     ax.scatter([p["info"] for p in F], [p["cap"] for p in F], marker=mk, s=74,
                facecolors=fill, edgecolors=colour, linewidths=1.8, zorder=5, label=label)
-    knee = F[0]                                    # lowest information on this front
-    dx, ha = (10, "left") if fill == "none" else (-10, "right")
-    ax.annotate(knee["lab"], (knee["info"], knee["cap"]), xytext=(dx, -17),
-                textcoords="offset points", fontsize=7.6, color=colour, ha=ha,
-                arrowprops=dict(arrowstyle="-", color=colour, lw=0.7, alpha=0.6))
+    # Label EVERY drawn point. Labelling only the knee reads as though the other points
+    # have no hyperparameters, which confused a reader of an earlier version.
+    for j, p in enumerate(F):
+        _ALL_LABELS.append((p["info"], p["cap"], p["lab"], colour))
 
 # The single most important thing to see: the two methods move in OPPOSITE directions when
 # labels go wrong. Draw that movement rather than leaving it to be inferred from line style.
@@ -127,6 +127,16 @@ ax.axvspan(0.47, 0.52, color="#f3f3f1", zorder=0)
 ax.text(0.495, 0.748, "a model that\nremoved nothing", fontsize=7.6, color=GREY,
         ha="center", va="bottom", linespacing=1.4)
 
+# place every label, nudging vertically where points nearly coincide
+_ALL_LABELS.sort()
+for i, (xx, yy, lab, col) in enumerate(_ALL_LABELS):
+    n = sum(1 for (qx, qy, _, _) in _ALL_LABELS[:i]
+            if abs(qx - xx) < 0.045 and abs(qy - yy) < 0.030)
+    ax.annotate(lab, (xx, yy), xytext=(((-1) ** n) * 6 * n, 10 + 15 * n),
+                textcoords="offset points",
+                fontsize=7.3, color=col, ha="center",
+                arrowprops=dict(arrowstyle="-", color=col, lw=0.6, alpha=0.45))
+
 ax.set_xlabel("INFORMATION left in the shipped model   |AUC(logit 5) − 0.5|"
               "        ←  better removal", fontsize=9.4)
 ax.set_ylabel("CAPABILITY it still has   recall on 5s, module attached   better  →",
@@ -143,15 +153,15 @@ ax.legend(fontsize=8.6, frameon=False, loc="lower center", handletextpad=0.7, la
 gc, gn = GRAM[0.0][0]["info"], GRAM[0.3][0]["info"]
 cc, cn = CA[0.0][0]["info"], CA[0.3][0]["info"]
 fig.suptitle("Label noise moves the two methods in opposite directions",
-             fontsize=12.8, x=0.080, ha="left", y=0.975)
-fig.text(0.080, 0.938,
-         "Dashed/hollow = clean labels.  Solid/filled = 30% of 5s wearing another digit's "
-         "label.  Each point is one hyperparameter setting;\nonly non-dominated ones are "
-         "drawn.  Both methods scored the same way, each filtered by what actually breaks for "
-         "it — GRAM by\nwhether the module ever learned 5, core adaptation by whether the "
-         "other nine digits survived.",
+             fontsize=12.8, x=0.080, ha="left", y=0.978)
+fig.text(0.080, 0.948,
+         "Dashed/hollow = clean labels.   Solid/filled = 30% of 5s wearing another digit's label.\n"
+         "Every point is one hyperparameter setting, labelled with its values. Only the best trade-offs are shown —\n"
+         "a setting appears if nothing beat it on BOTH axes at once.\n"
+         "Each method is filtered by what actually breaks for it: GRAM by whether the module ever learned 5,\n"
+         "core adaptation by whether the other nine digits survived.",
          fontsize=8.5, color="#666666", linespacing=1.5, va="top")
-fig.text(0.080, 0.845,
+fig.text(0.080, 0.833,
          f"GRAM gets BETTER under noise:  {gc:.3f} → {gn:.3f} information at its best "
          f"setting.    Core adaptation gets WORSE:  {cc:.3f} → {cn:.3f}.\n"
          "A mislabeled 5 reaches GRAM as a wrong LABEL, which pushes logit 5 down. It reaches "
@@ -161,7 +171,7 @@ fig.text(0.080, 0.845,
 # Both axes here are the model's OWN behaviour. A linear probe fitted on the ten logits
 # recovers far more than logit 5 alone, for every usable setting of either method -- so this
 # figure says which method EMITS less, not which leaves less behind.
-fig.text(0.080, 0.772,
+fig.text(0.080, 0.737,
          "Caveat: both axes are what the model EMITS. A linear probe on its ten logits "
          "recovers 0.93\u20130.99 for every usable setting of either\nmethod, against readouts "
          "as low as 0.48 \u2014 GRAM's knee here reads 0.549 by readout and 0.927 by probe. "
