@@ -192,6 +192,34 @@ GRAM moves 0.950 -> 0.160 under steering, which looks dramatic until the random 
 too. `elicit5.py` mandates that control for the story track; `steer.py`'s MNIST path lacked
 one, and it was added before any of these numbers were read.
 
+## Retraining: how many labeled 5s undo the removal?
+
+![retraining attack](figures/retrain.png)
+
+The shipped model is fine-tuned on k labeled 5s plus 4k non-5s and rescored as it trains,
+gated on the model staying useful (non-5 accuracy >= 95%) so an attack that wins by wrecking
+the model does not count. AUC, never recall.
+
+| shipped model | as shipped | k=10 | k=50 | k=200 |
+|---|---:|---:|---:|---:|
+| dense, nothing removed | 0.9996 | 0.9996 | 0.9996 | 0.9996 |
+| filtered | 0.7877 | 0.9869 | 0.9935 | 0.9962 |
+| GRAM, ablated | 0.9504 | 0.9821 | 0.9933 | 0.9957 |
+| core adaptation | 0.7519 | **0.7519** | 0.9923 | 0.9969 |
+
+**Fifty labeled 5s put all three removal routes within 0.007 AUC of a model that never
+removed anything.** At k=200 the gap is 0.004. Whatever these methods did, a few dozen
+examples undoes it.
+
+The one real difference is at **k=10**: core adaptation holds at its shipped 0.7519,
+completely unmoved, while filtering jumps to 0.9869 and GRAM to 0.9821. So core adaptation
+buys genuine resistance to a very weak attacker and none at all to a slightly better one.
+
+Not yet run across noise or model size -- `scale_study.py` has this attack built in at
+k in {10, 50} for 5 widths x 3 noise levels x 4 arms, and is the remaining sweep. Seed 0
+only; `results/summary_elicit.md` reports the same experiment in recall and is superseded
+(its "28.6+-40.4" is the recall floor flickering, not a measurement).
+
 ## Probe on the logits against the model's own readout
 
 ![probe vs readout](figures/probe_vs_readout.png)
