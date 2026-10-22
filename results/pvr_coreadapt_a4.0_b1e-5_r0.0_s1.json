@@ -1,0 +1,20 @@
+{
+ "method": "coreadapt",
+ "a": 4.0,
+ "b": 1e-05,
+ "rate": 0.0,
+ "seed": 1,
+ "probe_by_depth": {
+  "embed": 0.998413654974388,
+  "block1": 0.9995415009915888,
+  "block2": 0.9993132977267312,
+  "logits": 0.9519067158226838
+ },
+ "probe_logits": 0.9519067158226838,
+ "probe_logits_info": 0.4519067158226838,
+ "probe_best_trunk": 0.9995415009915888,
+ "readout_auc": 0.4827657300239675,
+ "readout_info": 0.0172342699760325,
+ "capability": 0.939461886882782,
+ "acc_others": 0.977053165435791
+}
